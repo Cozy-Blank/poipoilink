@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>poipoilink - 偏愛WEBストック</title>
+  <title>poipoilink - Xポストテキスト化 & WEBストック</title>
   <style>
     :root {
       --primary: #ec4899;
@@ -67,6 +67,110 @@
       border: 2px solid var(--border-color);
     }
 
+    .fieldset {
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      background: #fff5f8;
+    }
+
+    .fieldset legend {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      padding: 0 6px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-size: 0.9rem;
+      outline: none;
+      color: var(--text-main);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn-fetch {
+      width: 100%;
+      padding: 10px;
+      background: #fff;
+      color: var(--primary-dark);
+      border: 1.5px solid var(--primary);
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-fetch:active {
+      background: var(--primary-light);
+    }
+
+    /* プレビュー領域 */
+    .preview-card {
+      background: #fff;
+      border: 1.5px solid var(--border-color);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .preview-author {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .preview-body {
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .btn-action {
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-copy {
+      background: #f1f5f9;
+      color: #334155;
+    }
+
+    .btn-save {
+      background: var(--primary-dark);
+      color: #fff;
+    }
+
+    /* タグ選択 */
     .section-label {
       font-size: 0.8rem;
       font-weight: 800;
@@ -114,50 +218,11 @@
       transition: all 0.2s;
     }
 
-    /* 選択状態 */
     .type-btn.selected {
       background: var(--primary);
       color: #fff;
       border-color: var(--primary-dark);
       box-shadow: 0 2px 4px rgba(236, 72, 153, 0.2);
-    }
-
-    .form-group {
-      margin-bottom: 10px;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      border: 1.5px solid var(--border-color);
-      border-radius: 12px;
-      font-size: 0.9rem;
-      outline: none;
-      background: #fff5f8;
-      color: var(--text-main);
-    }
-
-    input[type="text"]:focus {
-      border-color: var(--primary);
-      background: #fff;
-    }
-
-    .btn-primary {
-      width: 100%;
-      padding: 12px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 0.95rem;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(236, 72, 153, 0.3);
-      margin-top: 4px;
-    }
-
-    .btn-primary:active {
-      background: var(--primary-dark);
     }
 
     /* フィルタータブ */
@@ -196,7 +261,7 @@
       border-color: var(--primary);
     }
 
-    /* リストカード */
+    /* 保存リスト */
     .task-list {
       display: flex;
       flex-direction: column;
@@ -205,7 +270,7 @@
 
     .task-item {
       background-color: var(--card-bg);
-      background-image: linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)), var(--bg-image-url);
+      background-image: linear-gradient(rgba(255, 255, 255, 0.90), rgba(255, 255, 255, 0.90)), var(--bg-image-url);
       background-size: cover;
       background-position: center;
       border-radius: 18px;
@@ -215,7 +280,6 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      position: relative;
     }
 
     .task-header {
@@ -240,9 +304,11 @@
     }
 
     .task-title {
-      font-size: 0.95rem;
-      font-weight: 800;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-all;
       color: var(--text-main);
+      line-height: 1.5;
     }
 
     .link-box {
@@ -251,13 +317,23 @@
       gap: 6px;
       color: var(--primary-dark);
       text-decoration: none;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 700;
       background: var(--primary-light);
-      padding: 8px 14px;
-      border-radius: 10px;
+      padding: 6px 12px;
+      border-radius: 8px;
       word-break: break-all;
       width: fit-content;
+      margin-top: 4px;
+    }
+
+    .item-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border-color);
     }
 
     .delete-btn {
@@ -265,17 +341,17 @@
       border: none;
       color: #f43f5e;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 0.85rem;
       font-weight: 800;
     }
 
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
+      padding: 50px 20px;
       color: var(--text-muted);
       font-size: 0.9rem;
       font-weight: 700;
-      background: linear-gradient(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.75)), var(--bg-image-url);
+      background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), var(--bg-image-url);
       background-size: cover;
       background-position: center;
       border-radius: 20px;
@@ -286,23 +362,39 @@
 <body>
 
 <header>
-  <h1>🖤 poipoilink</h1>
+  <h1>🖤 Xポスト テキスト化 & poipoilink</h1>
 </header>
 
 <div class="container">
-  <!-- 追加フォーム -->
+  <!-- 入力フォーム -->
   <div class="card">
-    <div class="form-group">
-      <input type="text" id="urlInput" placeholder="URL(X / note / ブログなど)を貼り付け..." oninput="autoDetectTags()">
+    <fieldset class="fieldset">
+      <legend>XのポストURLを貼り付け</legend>
+      <input type="text" id="urlInput" placeholder="https://x.com/username/status/..." oninput="autoDetectTags()">
+    </fieldset>
+
+    <button class="btn-fetch" onclick="fetchPostText()">
+      📥 本文を取得する
+    </button>
+
+    <!-- 取得テキスト プレビュー画面 -->
+    <div class="preview-card" id="previewArea" style="display: none;">
+      <div class="preview-author" id="previewAuthor">ユーザー名</div>
+      <div class="preview-body" id="previewBody">ここに本文が入ります</div>
+      <div class="action-row">
+        <button class="btn-action btn-copy" onclick="copyText()">📋 コピー</button>
+        <button class="btn-action btn-save" onclick="addLink()">💾 アプリに保存</button>
+      </div>
     </div>
 
-    <div class="form-group">
-      <input type="text" id="memoInput" placeholder="メモ（キーワードからタグが自動検出されます）" oninput="autoDetectTags()">
-    </div>
+    <fieldset class="fieldset">
+      <legend>メモ（直接入力も可）</legend>
+      <textarea id="memoInput" placeholder="本文やメモを入力..." oninput="autoDetectTags()"></textarea>
+    </fieldset>
 
     <span class="section-label">
-      タグ（自動判定・手動で変更可）
-      <span class="auto-hint">※複数えらべます</span>
+      タグ（自動判定・手動変更可）
+      <span class="auto-hint">※複数選択OK</span>
     </span>
 
     <div class="type-selector-wrapper">
@@ -322,10 +414,12 @@
       </div>
     </div>
 
-    <button class="btn-primary" onclick="addLink()">poipoiに保存する</button>
+    <button class="btn-action btn-save" style="width:100%; justify-content:center; padding:12px; font-size:0.95rem;" onclick="addLink()">
+      💾 直接リストに保存する
+    </button>
   </div>
 
-  <!-- フィルタータブ -->
+  <!-- 保存リストのフィルタータブ -->
   <div class="tabs-wrapper">
     <div class="tabs" id="filterTabs">
       <div class="tab active" onclick="setFilter('all', this)">すべて</div>
@@ -349,8 +443,10 @@
 </div>
 
 <script>
-  let manualTags = []; // 手動で変更・追加したタグ
+  let manualTags = [];
   let currentFilter = 'all';
+  let fetchedAuthor = '';
+  let fetchedBodyText = '';
   let links = JSON.parse(localStorage.getItem('poipoilinks') || '[]');
 
   // ジャンルごとの自動判定キーワード辞書
@@ -368,11 +464,70 @@
     '法則': ['法則', '密議', '象徴', '智慧', 'フリーメーソン', '神殿', 'pi', '重力', 'ポリフォニック', '倍音', 'フィボナッチ', '黄金比', 'オクターブ', '宇宙', '波動', '原理', '真理']
   };
 
-  // 入力内容に合わせてタグをリアルタイム自動検出
+  // 本文自動取得機能（制限回避プロキシ対応）
+  async function fetchPostText() {
+    const urlInput = document.getElementById('urlInput').value.trim();
+    if (!urlInput) {
+      alert('XのポストURLを入力してください');
+      return;
+    }
+
+    const previewArea = document.getElementById('previewArea');
+    const previewAuthor = document.getElementById('previewAuthor');
+    const previewBody = document.getElementById('previewBody');
+
+    previewArea.style.display = 'block';
+    previewAuthor.textContent = '取得中...';
+    previewBody.textContent = 'ポスト本文を取得しています...';
+
+    try {
+      // oEmbed API 経由で取得
+      const targetUrl = encodeURIComponent(urlInput);
+      const oembedUrl = `https://publish.twitter.com/oembed?url=${targetUrl}&omit_script=true`;
+      
+      // CORS回避用プロキシ
+      const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(oembedUrl)}`);
+      const data = await res.json();
+      
+      if (data.contents) {
+        const json = JSON.parse(data.contents);
+        fetchedAuthor = json.author_name || 'X User';
+        
+        // HTMLタグを除去して純粋なテキスト抽出（途切り制約を極力解除）
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = json.html;
+        
+        // Blockquoteからテキストを綺麗に復元
+        let text = tempDiv.innerText || tempDiv.textContent || '';
+        text = text.replace(/—\s*.*$/, '').trim(); // 投稿者クレジット削除
+
+        fetchedBodyText = text;
+        previewAuthor.textContent = fetchedAuthor;
+        previewBody.textContent = fetchedBodyText;
+
+        // メモ欄にもセットして自動タグ判定
+        document.getElementById('memoInput').value = fetchedBodyText;
+        autoDetectTags();
+      } else {
+        throw new Error('取得できませんでした');
+      }
+    } catch (e) {
+      previewAuthor.textContent = 'お知らせ';
+      previewBody.textContent = '本文の自動取得に失敗しました。公開設定を確認するか、直接メモ欄に本文を貼り付けて保存してください。';
+    }
+  }
+
+  // クリップボードへコピー
+  function copyText() {
+    if (!fetchedBodyText) return;
+    navigator.clipboard.writeText(fetchedBodyText).then(() => {
+      alert('本文をコピーしました！');
+    });
+  }
+
+  // 自動タグ検出
   function autoDetectTags() {
     const text = (document.getElementById('urlInput').value + ' ' + document.getElementById('memoInput').value).toLowerCase();
-    
-    // 自動判定されたタグを取得
     let detected = [];
     for (const [tag, keywords] of Object.entries(keywordMap)) {
       if (keywords.some(kw => text.includes(kw.toLowerCase()))) {
@@ -380,7 +535,6 @@
       }
     }
 
-    // 画面のタグボタンの状態を更新
     document.querySelectorAll('#tagSelector .type-btn').forEach(btn => {
       const tag = btn.dataset.tag;
       const isSelected = manualTags.includes(tag) || (manualTags.length === 0 && detected.includes(tag));
@@ -388,11 +542,9 @@
     });
   }
 
-  // タグの手動トグル選択
+  // タグ選択トグル
   function toggleTag(btn) {
     const tag = btn.dataset.tag;
-    
-    // 現在選択されている全タグを取得
     let activeTags = getSelectedTagsFromUI();
 
     if (activeTags.includes(tag)) {
@@ -402,8 +554,6 @@
     }
 
     manualTags = [...activeTags];
-
-    // ボタンの見た目を更新
     document.querySelectorAll('#tagSelector .type-btn').forEach(b => {
       b.classList.toggle('selected', manualTags.includes(b.dataset.tag));
     });
@@ -424,19 +574,19 @@
     renderLinks();
   }
 
+  // 保存処理
   function addLink() {
     const urlInput = document.getElementById('urlInput');
     const memoInput = document.getElementById('memoInput');
     const url = urlInput.value.trim();
-    const memo = memoInput.value.trim();
+    const memo = memoInput.value.trim() || fetchedBodyText;
 
-    if (!url) {
-      alert('URLを入力してください');
+    if (!url && !memo) {
+      alert('URLまたは本文を入力してください');
       return;
     }
 
     let finalTags = getSelectedTagsFromUI();
-    // どのタグも当てはまらない場合は「その他」を適用
     if (finalTags.length === 0) {
       finalTags = ['その他'];
     }
@@ -444,7 +594,8 @@
     const newLink = {
       id: Date.now(),
       url: url,
-      memo: memo || '無題のリンク',
+      author: fetchedAuthor,
+      memo: memo || '無題のストック',
       tags: finalTags,
       createdAt: new Date().toLocaleDateString('ja-JP')
     };
@@ -452,9 +603,12 @@
     links.unshift(newLink);
     saveAndRender();
 
-    // 初期化
+    // 画面の初期化
     urlInput.value = '';
     memoInput.value = '';
+    fetchedBodyText = '';
+    fetchedAuthor = '';
+    document.getElementById('previewArea').style.display = 'none';
     manualTags = [];
     document.querySelectorAll('#tagSelector .type-btn').forEach(btn => btn.classList.remove('selected'));
   }
@@ -464,39 +618,37 @@
     saveAndRender();
   }
 
+  function copyItemText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('本文をコピーしました！');
+    });
+  }
+
   function saveAndRender() {
     localStorage.setItem('poipoilinks', JSON.stringify(links));
     renderLinks();
-  }
-
-  function getLinkText(url) {
-    if (url.includes('twitter.com') || url.includes('x.com')) return '🖤 X(ポスト)を開く';
-    if (url.includes('note.com')) return '📗 noteで読む';
-    if (url.includes('youtube.com') || url.includes('youtu.be')) return '▶️ YouTubeで見る';
-    if (url.includes('instagram.com')) return '📷 Instagramで開く';
-    return '🔗 リンク先のページを開く';
   }
 
   function renderLinks() {
     const listEl = document.getElementById('linkList');
     const filteredLinks = links.filter(link => {
       if (currentFilter === 'all') return true;
-      const linkTags = link.tags || [link.type || 'その他'];
+      const linkTags = link.tags || ['その他'];
       return linkTags.includes(currentFilter);
     });
 
     if (filteredLinks.length === 0) {
       listEl.innerHTML = `
         <div class="empty-state">
-          <div>🌸 まだリンクがありません</div>
-          <div style="font-size: 0.75rem; margin-top: 4px; font-weight: normal;">URLやメモを入力すると自動でタグ付けされます！</div>
+          <div>🌸 保存されたストックはありません</div>
+          <div style="font-size: 0.75rem; margin-top: 4px; font-weight: normal;">URLを入力して「本文を取得」を押すと保存できます！</div>
         </div>
       `;
       return;
     }
 
     listEl.innerHTML = filteredLinks.map(link => {
-      const linkTags = link.tags || [link.type || 'その他'];
+      const linkTags = link.tags || ['その他'];
       const badgesHtml = linkTags.map(t => `<span class="badge">${t}</span>`).join('');
 
       return `
@@ -504,15 +656,21 @@
           <div class="task-header">
             <div class="badge-container">${badgesHtml}</div>
             <span style="font-size:0.75rem; color: var(--text-muted); font-weight:700;">${link.createdAt}</span>
-            <button class="delete-btn" onclick="deleteLink(${link.id})" title="削除">✕</button>
           </div>
-          <div class="task-title">
-            ${escapeHtml(link.memo)}
-          </div>
-          <div>
-            <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="link-box">
-              ${getLinkText(link.url)}
-            </a>
+          ${link.author ? `<div style="font-size:0.75rem; font-weight:800; color:var(--text-muted);">${escapeHtml(link.author)}</div>` : ''}
+          <div class="task-title">${escapeHtml(link.memo)}</div>
+          
+          ${link.url ? `
+            <div>
+              <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="link-box">
+                🔗 ポストを開く
+              </a>
+            </div>
+          ` : ''}
+
+          <div class="item-actions">
+            <button class="btn-action btn-copy" style="padding:4px 8px;" onclick="copyItemText(\`${escapeHtml(link.memo)}\`)">📋 コピー</button>
+            <button class="delete-btn" onclick="deleteLink(${link.id})">削除</button>
           </div>
         </div>
       `;
@@ -520,6 +678,7 @@
   }
 
   function escapeHtml(str) {
+    if (!str) return '';
     return str.replace(/[&<>"']/g, match => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     }[match]));
