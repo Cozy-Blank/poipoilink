@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>poipoilink - 偏愛WEBストック</title>
+  <style>
+    :root {
+      --primary: #ec4899;
+      --primary-dark: #be185d;
+      --primary-light: #fce7f3;
+      --bg: #fdf2f8;
+      --card-bg: #ffffff;
+      --text-main: #831843;
+      --text-muted: #9d174d;
+      --border-color: #fbcfe8;
+      --bg-image-url: url('https://i.ibb.co/pmYQ4QH/rink.png');
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding-bottom: 40px;
+    }
+
+    /* ヘッダー */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px 16px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(236, 72, 153, 0.05);
+    }
+
+    header h1 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      letter-spacing: 0.05em;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 12px 12px 0 12px;
+    }
+
+    /* 入力フォームカード */
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.06);
+      margin-bottom: 14px;
+      border: 2px solid var(--border-color);
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .auto-hint {
+      font-size: 0.7rem;
+      font-weight: normal;
+      color: var(--primary-dark);
+      opacity: 0.8;
+    }
+
+    .type-selector-wrapper {
+      overflow-x: auto;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .type-selector-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    .type-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .type-btn {
+      padding: 6px 12px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 16px;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    /* 選択状態 */
+    .type-btn.selected {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary-dark);
+      box-shadow: 0 2px 4px rgba(236, 72, 153, 0.2);
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 0.9rem;
+      outline: none;
+      background: #fff5f8;
+      color: var(--text-main);
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(236, 72, 153, 0.3);
+      margin-top: 4px;
+    }
+
+    .btn-primary:active {
+      background: var(--primary-dark);
+    }
+
+    /* フィルタータブ */
+    .tabs-wrapper {
+      overflow-x: auto;
+      margin-bottom: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tabs-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      width: max-content;
+      padding-bottom: 4px;
+    }
+
+    .tab {
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      white-space: nowrap;
+    }
+
+    .tab.active {
+      color: #fff;
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* リストカード */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .task-item {
+      background-color: var(--card-bg);
+      background-image: linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)), var(--bg-image-url);
+      background-size: cover;
+      background-position: center;
+      border-radius: 18px;
+      padding: 14px 16px;
+      border: 2px solid var(--border-color);
+      box-shadow: 0 4px 10px rgba(236, 72, 153, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+    }
+
+    .task-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .badge-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .task-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .link-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: var(--primary-light);
+      padding: 8px 14px;
+      border-radius: 10px;
+      word-break: break-all;
+      width: fit-content;
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #f43f5e;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: linear-gradient(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.75)), var(--bg-image-url);
+      background-size: cover;
+      background-position: center;
+      border-radius: 20px;
+      border: 2px dashed var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🖤 poipoilink</h1>
+</header>
+
+<div class="container">
+  <!-- 追加フォーム -->
+  <div class="card">
+    <div class="form-group">
+      <input type="text" id="urlInput" placeholder="URL(X / note / ブログなど)を貼り付け..." oninput="autoDetectTags()">
+    </div>
+
+    <div class="form-group">
+      <input type="text" id="memoInput" placeholder="メモ（キーワードからタグが自動検出されます）" oninput="autoDetectTags()">
+    </div>
+
+    <span class="section-label">
+      タグ（自動判定・手動で変更可）
+      <span class="auto-hint">※複数えらべます</span>
+    </span>
+
+    <div class="type-selector-wrapper">
+      <div class="type-selector" id="tagSelector">
+        <button class="type-btn" data-tag="学び" onclick="toggleTag(this)">📚 学び</button>
+        <button class="type-btn" data-tag="健康" onclick="toggleTag(this)">🌿 健康</button>
+        <button class="type-btn" data-tag="防災" onclick="toggleTag(this)">⛑️ 防災</button>
+        <button class="type-btn" data-tag="暮らし" onclick="toggleTag(this)">🏠 暮らし</button>
+        <button class="type-btn" data-tag="アイデア" onclick="toggleTag(this)">💡 アイデア</button>
+        <button class="type-btn" data-tag="レシピ" onclick="toggleTag(this)">🍳 レシピ</button>
+        <button class="type-btn" data-tag="カスタムAI" onclick="toggleTag(this)">🤖 カスタムAI</button>
+        <button class="type-btn" data-tag="法律" onclick="toggleTag(this)">⚖️ 法律</button>
+        <button class="type-btn" data-tag="お金" onclick="toggleTag(this)">💰 お金</button>
+        <button class="type-btn" data-tag="読書映画" onclick="toggleTag(this)">🎬 読書映画</button>
+        <button class="type-btn" data-tag="法則" onclick="toggleTag(this)">🔍 法則</button>
+        <button class="type-btn" data-tag="その他" onclick="toggleTag(this)">✨ その他</button>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="addLink()">poipoiに保存する</button>
+  </div>
+
+  <!-- フィルタータブ -->
+  <div class="tabs-wrapper">
+    <div class="tabs" id="filterTabs">
+      <div class="tab active" onclick="setFilter('all', this)">すべて</div>
+      <div class="tab" onclick="setFilter('学び', this)">📚 学び</div>
+      <div class="tab" onclick="setFilter('健康', this)">🌿 健康</div>
+      <div class="tab" onclick="setFilter('防災', this)">⛑️ 防災</div>
+      <div class="tab" onclick="setFilter('暮らし', this)">🏠 暮らし</div>
+      <div class="tab" onclick="setFilter('アイデア', this)">💡 アイデア</div>
+      <div class="tab" onclick="setFilter('レシピ', this)">🍳 レシピ</div>
+      <div class="tab" onclick="setFilter('カスタムAI', this)">🤖 カスタムAI</div>
+      <div class="tab" onclick="setFilter('法律', this)">⚖️ 法律</div>
+      <div class="tab" onclick="setFilter('お金', this)">💰 お金</div>
+      <div class="tab" onclick="setFilter('読書映画', this)">🎬 読書映画</div>
+      <div class="tab" onclick="setFilter('法則', this)">🔍 法則</div>
+      <div class="tab" onclick="setFilter('その他', this)">✨ その他</div>
+    </div>
+  </div>
+
+  <!-- リスト表示部 -->
+  <div id="linkList" class="task-list"></div>
+</div>
+
+<script>
+  let manualTags = []; // 手動で変更・追加したタグ
+  let currentFilter = 'all';
+  let links = JSON.parse(localStorage.getItem('poipoilinks') || '[]');
+
+  // ジャンルごとの自動判定キーワード辞書
+  const keywordMap = {
+    '学び': ['学び', '自己啓発', 'マインド', '思考', '勉強', '学習', '習慣', '成長', '成功', 'モチベーション', '読書', '知識', 'スキル', '心理学', '哲学'],
+    '健康': ['健康', '睡眠', '食事', '栄養', '運動', '筋トレ', 'ダイエット', 'メンタル', 'ヘルス', '予防', '医療', 'ストレッチ', 'ヨガ'],
+    '防災': ['防災', '地震', '災害', '避難', '備蓄', 'ハザード', '台風', '救急', '安全', '緊急'],
+    '暮らし': ['暮らし', '生活', '掃除', '収納', 'インテリア', '家事', '便利グッズ', '断捨離', 'ライフハック', '部屋'],
+    'アイデア': ['アイデア', 'ひらめき', '企画', '発想', 'デザイン', 'クリエイティブ', 'ブレスト', '改善', '仕組み'],
+    'レシピ': ['レシピ', '料理', '献立', 'ごはん', 'スイーツ', '時短料理', '作り置き', 'おやつ', 'クッキング', '美味しい'],
+    'カスタムAI': ['AI', 'カスタムAI', 'ChatGPT', 'Prompt', 'プロンプト', 'Claude', 'Gemini', '生成AI', 'GPT', '自動化', 'LLM'],
+    '法律': ['法律', '契約', '規約', '著作権', '権利', '弁護士', '法務', '労働法', 'コンプライアンス', 'ルール'],
+    'お金': ['お金', '投資', '節約', '貯金', '資産運用', '税金', '株', 'NISA', '副業', '会計', 'マネー', '家計'],
+    '読書映画': ['読書', '映画', '本', 'シネマ', '小説', 'レビュー', '感想', 'おすすめ本', '映画鑑賞', 'アニメ', 'ドラマ'],
+    '法則': ['法則', '密議', '象徴', '智慧', 'フリーメーソン', '神殿', 'pi', '重力', 'ポリフォニック', '倍音', 'フィボナッチ', '黄金比', 'オクターブ', '宇宙', '波動', '原理', '真理']
+  };
+
+  // 入力内容に合わせてタグをリアルタイム自動検出
+  function autoDetectTags() {
+    const text = (document.getElementById('urlInput').value + ' ' + document.getElementById('memoInput').value).toLowerCase();
+    
+    // 自動判定されたタグを取得
+    let detected = [];
+    for (const [tag, keywords] of Object.entries(keywordMap)) {
+      if (keywords.some(kw => text.includes(kw.toLowerCase()))) {
+        detected.push(tag);
+      }
+    }
+
+    // 画面のタグボタンの状態を更新
+    document.querySelectorAll('#tagSelector .type-btn').forEach(btn => {
+      const tag = btn.dataset.tag;
+      const isSelected = manualTags.includes(tag) || (manualTags.length === 0 && detected.includes(tag));
+      btn.classList.toggle('selected', isSelected);
+    });
+  }
+
+  // タグの手動トグル選択
+  function toggleTag(btn) {
+    const tag = btn.dataset.tag;
+    
+    // 現在選択されている全タグを取得
+    let activeTags = getSelectedTagsFromUI();
+
+    if (activeTags.includes(tag)) {
+      activeTags = activeTags.filter(t => t !== tag);
+    } else {
+      activeTags.push(tag);
+    }
+
+    manualTags = [...activeTags];
+
+    // ボタンの見た目を更新
+    document.querySelectorAll('#tagSelector .type-btn').forEach(b => {
+      b.classList.toggle('selected', manualTags.includes(b.dataset.tag));
+    });
+  }
+
+  function getSelectedTagsFromUI() {
+    const selected = [];
+    document.querySelectorAll('#tagSelector .type-btn.selected').forEach(btn => {
+      selected.push(btn.dataset.tag);
+    });
+    return selected;
+  }
+
+  function setFilter(filter, element) {
+    currentFilter = filter;
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    element.classList.add('active');
+    renderLinks();
+  }
+
+  function addLink() {
+    const urlInput = document.getElementById('urlInput');
+    const memoInput = document.getElementById('memoInput');
+    const url = urlInput.value.trim();
+    const memo = memoInput.value.trim();
+
+    if (!url) {
+      alert('URLを入力してください');
+      return;
+    }
+
+    let finalTags = getSelectedTagsFromUI();
+    // どのタグも当てはまらない場合は「その他」を適用
+    if (finalTags.length === 0) {
+      finalTags = ['その他'];
+    }
+
+    const newLink = {
+      id: Date.now(),
+      url: url,
+      memo: memo || '無題のリンク',
+      tags: finalTags,
+      createdAt: new Date().toLocaleDateString('ja-JP')
+    };
+
+    links.unshift(newLink);
+    saveAndRender();
+
+    // 初期化
+    urlInput.value = '';
+    memoInput.value = '';
+    manualTags = [];
+    document.querySelectorAll('#tagSelector .type-btn').forEach(btn => btn.classList.remove('selected'));
+  }
+
+  function deleteLink(id) {
+    links = links.filter(l => l.id !== id);
+    saveAndRender();
+  }
+
+  function saveAndRender() {
+    localStorage.setItem('poipoilinks', JSON.stringify(links));
+    renderLinks();
+  }
+
+  function getLinkText(url) {
+    if (url.includes('twitter.com') || url.includes('x.com')) return '🖤 X(ポスト)を開く';
+    if (url.includes('note.com')) return '📗 noteで読む';
+    if (url.includes('youtube.com') || url.includes('youtu.be')) return '▶️ YouTubeで見る';
+    if (url.includes('instagram.com')) return '📷 Instagramで開く';
+    return '🔗 リンク先のページを開く';
+  }
+
+  function renderLinks() {
+    const listEl = document.getElementById('linkList');
+    const filteredLinks = links.filter(link => {
+      if (currentFilter === 'all') return true;
+      const linkTags = link.tags || [link.type || 'その他'];
+      return linkTags.includes(currentFilter);
+    });
+
+    if (filteredLinks.length === 0) {
+      listEl.innerHTML = `
+        <div class="empty-state">
+          <div>🌸 まだリンクがありません</div>
+          <div style="font-size: 0.75rem; margin-top: 4px; font-weight: normal;">URLやメモを入力すると自動でタグ付けされます！</div>
+        </div>
+      `;
+      return;
+    }
+
+    listEl.innerHTML = filteredLinks.map(link => {
+      const linkTags = link.tags || [link.type || 'その他'];
+      const badgesHtml = linkTags.map(t => `<span class="badge">${t}</span>`).join('');
+
+      return `
+        <div class="task-item">
+          <div class="task-header">
+            <div class="badge-container">${badgesHtml}</div>
+            <span style="font-size:0.75rem; color: var(--text-muted); font-weight:700;">${link.createdAt}</span>
+            <button class="delete-btn" onclick="deleteLink(${link.id})" title="削除">✕</button>
+          </div>
+          <div class="task-title">
+            ${escapeHtml(link.memo)}
+          </div>
+          <div>
+            <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="link-box">
+              ${getLinkText(link.url)}
+            </a>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>"']/g, match => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[match]));
+  }
+
+  renderLinks();
+</script>
+
+</body>
+</html>
