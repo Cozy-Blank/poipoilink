@@ -459,15 +459,25 @@
     'レシピ': ['レシピ', '料理', '献立', 'ごはん', 'スイーツ', '時短料理', '作り置き', 'おやつ', 'クッキング', '美味しい'],
     'カスタムAI': ['AI', 'カスタムAI', 'ChatGPT', 'Prompt', 'プロンプト', 'Claude', 'Gemini', '生成AI', 'GPT', '自動化', 'LLM'],
     '法律': ['法律', '契約', '規約', '著作権', '権利', '弁護士', '法務', '労働法', 'コンプライアンス', 'ルール'],
-    'お金': ['お金', '投資', '節約', '貯金', '資産運用', '税金', '株', 'NISA', '副業', '会計', 'マネー', '家計'],
+    'お金': ['お金', '投資', '節約', '貯金', '資産運用', '税金', '株', 'NISA', '副業', '会計', 'マネー', '家計', 'btc', 'bitcoin', '暗号資産', '仮想通貨'],
     '読書映画': ['読書', '映画', '本', 'シネマ', '小説', 'レビュー', '感想', 'おすすめ本', '映画鑑賞', 'アニメ', 'ドラマ'],
     '法則': ['法則', '密議', '象徴', '智慧', 'フリーメーソン', '神殿', 'pi', '重力', 'ポリフォニック', '倍音', 'フィボナッチ', '黄金比', 'オクターブ', '宇宙', '波動', '原理', '真理']
   };
 
-  // 本文自動取得機能（制限回避プロキシ対応）
+  // ポストURLから status ID やユーザー名、URL正規化を行う関数
+  function normalizeXUrl(inputUrl) {
+    let url = inputUrl.trim();
+    // x.com -> twitter.com に変換（APIの互換性のため）
+    url = url.replace('https://x.com/', 'https://twitter.com/').replace('http://x.com/', 'https://twitter.com/');
+    // URLクエリパラメータ(?s=20など)を除去
+    url = url.split('?')[0];
+    return url;
+  }
+
+  // 本文自動取得機能（多重API＋フォールバック構造）
   async function fetchPostText() {
-    const urlInput = document.getElementById('urlInput').value.trim();
-    if (!urlInput) {
+    const rawUrl = document.getElementById('urlInput').value.trim();
+    if (!rawUrl) {
       alert('XのポストURLを入力してください');
       return;
     }
@@ -480,41 +490,83 @@
     previewAuthor.textContent = '取得中...';
     previewBody.textContent = 'ポスト本文を取得しています...';
 
+    const targetUrl = normalizeXUrl(rawUrl);
+
+    // 方法1: FxTwitter / FixupX API (長文取得・全文取得に最適)
     try {
-      // oEmbed API 経由で取得
-      const targetUrl = encodeURIComponent(urlInput);
-      const oembedUrl = `https://publish.twitter.com/oembed?url=${targetUrl}&omit_script=true`;
+      const match = targetUrl.match(/status\/(\d+)/);
+      if (match && match[1]) {
+        const statusId = match[1];
+        const res = await fetch(`https://api.fxtwitter.com/status/${statusId}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.tweet) {
+            fetchedAuthor = data.tweet.author ? `${data.tweet.author.name} (@${data.tweet.author.screen_name})` : 'X User';
+            fetchedBodyText = data.tweet.text || '';
+            
+            showSuccess(fetchedAuthor, fetchedBodyText);
+            return;
+          }
+        }
+      }
+    } catch (e) {
+      console.log('FxTwitter API failed, trying oEmbed...');
+    }
+
+    // 方法2: Official oEmbed API + corsproxy.io (バックアップ)
+    try {
+      const oembedUrl = `https://publish.twitter.com/oembed?url=${encodeURIComponent(targetUrl)}&omit_script=true`;
+      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(oembedUrl)}`;
+      const res = await fetch(proxyUrl);
       
-      // CORS回避用プロキシ
+      if (res.ok) {
+        const json = await res.json();
+        fetchedAuthor = json.author_name || 'X User';
+        
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = json.html;
+        let text = tempDiv.innerText || tempDiv.textContent || '';
+        text = text.replace(/—\s*.*$/, '').trim();
+
+        fetchedBodyText = text;
+        showSuccess(fetchedAuthor, fetchedBodyText);
+        return;
+      }
+    } catch (e) {
+      console.log('oEmbed failed, trying method 3...');
+    }
+
+    // 方法3: AllOrigins Proxy (第3のバックアップ)
+    try {
+      const oembedUrl = `https://publish.twitter.com/oembed?url=${encodeURIComponent(targetUrl)}&omit_script=true`;
       const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(oembedUrl)}`);
       const data = await res.json();
-      
       if (data.contents) {
         const json = JSON.parse(data.contents);
         fetchedAuthor = json.author_name || 'X User';
-        
-        // HTMLタグを除去して純粋なテキスト抽出（途切り制約を極力解除）
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = json.html;
-        
-        // Blockquoteからテキストを綺麗に復元
         let text = tempDiv.innerText || tempDiv.textContent || '';
-        text = text.replace(/—\s*.*$/, '').trim(); // 投稿者クレジット削除
+        text = text.replace(/—\s*.*$/, '').trim();
 
         fetchedBodyText = text;
-        previewAuthor.textContent = fetchedAuthor;
-        previewBody.textContent = fetchedBodyText;
-
-        // メモ欄にもセットして自動タグ判定
-        document.getElementById('memoInput').value = fetchedBodyText;
-        autoDetectTags();
-      } else {
-        throw new Error('取得できませんでした');
+        showSuccess(fetchedAuthor, fetchedBodyText);
+        return;
       }
     } catch (e) {
-      previewAuthor.textContent = 'お知らせ';
-      previewBody.textContent = '本文の自動取得に失敗しました。公開設定を確認するか、直接メモ欄に本文を貼り付けて保存してください。';
+      console.log('All origins failed too');
     }
+
+    // すべて失敗した場合
+    previewAuthor.textContent = 'お知らせ';
+    previewBody.textContent = '本文の自動取得に失敗しました。非公開アカウントか削除された投稿の可能性があります。直接メモ欄に本文を貼り付けて保存してください。';
+  }
+
+  function showSuccess(author, body) {
+    document.getElementById('previewAuthor').textContent = author;
+    document.getElementById('previewBody').textContent = body;
+    document.getElementById('memoInput').value = body;
+    autoDetectTags();
   }
 
   // クリップボードへコピー
