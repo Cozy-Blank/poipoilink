@@ -67,7 +67,7 @@
       padding: 12px 12px 0 12px;
     }
 
-    /* 上段固定イラストバナー（横長四角・透過なし・くっきり表示） */
+    /* 上段固定イラストバナー */
     .top-banner-card {
       width: 100%;
       height: 140px;
@@ -80,7 +80,6 @@
       box-shadow: 0 4px 12px rgba(236, 72, 153, 0.08);
       margin-bottom: 14px;
       overflow: hidden;
-      /* 透過なしで鮮明に保持、入れ替え不可 */
       pointer-events: none;
       user-select: none;
     }
@@ -151,7 +150,7 @@
       background: var(--primary-light);
     }
 
-    /* プレビュー領域（イラスト背景なし・白でクリアに表示） */
+    /* プレビュー領域 */
     .preview-card {
       background: #ffffff;
       border: 1.5px solid var(--border-color);
@@ -245,7 +244,7 @@
       border-color: var(--primary);
     }
 
-    /* 保存リスト（イラスト背景は完全削除・純白カード） */
+    /* 保存リスト */
     .task-list {
       display: flex;
       flex-direction: column;
@@ -351,21 +350,21 @@
 </header>
 
 <div class="container">
-  <!-- 上段固定のイラスト表示エリア（横長四角・透過なし） -->
+  <!-- 上段固定イラストエリア -->
   <div class="top-banner-card"></div>
 
   <!-- 入力フォーム -->
   <div class="card">
     <fieldset class="fieldset">
-      <legend>XのポストURLを貼り付け</legend>
-      <input type="text" id="urlInput" placeholder="https://x.com/username/status/..." oninput="autoDetectGenre()">
+      <legend>リンク先URLを貼り付け</legend>
+      <input type="text" id="urlInput" placeholder="リンク先URLを貼り付け" oninput="autoDetectGenre()">
     </fieldset>
 
     <button class="btn-fetch" onclick="fetchPostText()">
       📥 本文を取得する
     </button>
 
-    <!-- 取得テキスト プレビュー画面（背景イラストなし） -->
+    <!-- 取得テキスト プレビュー画面 -->
     <div class="preview-card" id="previewArea" style="display: none;">
       <div class="preview-header">
         <div class="preview-author" id="previewAuthor">ユーザー名</div>
@@ -377,7 +376,7 @@
       </div>
     </div>
 
-    <!-- ジャンル選択（自動判定 & プルダウンで変更可） -->
+    <!-- ジャンル選択 -->
     <fieldset class="fieldset">
       <legend>ジャンル（自動判定・変更可能）</legend>
       <select id="genreSelect">
@@ -397,7 +396,7 @@
       </select>
     </fieldset>
 
-    <!-- メモ欄（基本空欄スタート） -->
+    <!-- メモ欄 -->
     <fieldset class="fieldset">
       <legend>メモ（空欄のままでもOK）</legend>
       <textarea id="memoInput" placeholder="メモを入力..."></textarea>
@@ -408,7 +407,7 @@
     </button>
   </div>
 
-  <!-- 保存リストのフィルタータブ -->
+  <!-- フィルタータブ -->
   <div class="tabs-wrapper">
     <div class="tabs" id="filterTabs">
       <div class="tab active" onclick="setFilter('all', this)">すべて</div>
@@ -438,7 +437,6 @@
   let fetchedBodyText = '';
   let links = JSON.parse(localStorage.getItem('poipoilinks') || '[]');
 
-  // ジャンル自動判定キーワード
   const keywordMap = {
     'オンラインサロン': ['サロン', 'コミュニティ', 'メンバー', 'オフ会', '限定配信', 'discord', 'slack'],
     '学び': ['学び', '自己啓発', 'マインド', '思考', '勉強', '学習', '習慣', '成長', '成功', 'モチベーション', '読書', '知識', 'スキル', '心理学', '哲学'],
@@ -461,11 +459,10 @@
     return url;
   }
 
-  // 本文取得機能
   async function fetchPostText() {
     const rawUrl = document.getElementById('urlInput').value.trim();
     if (!rawUrl) {
-      alert('XのポストURLを入力してください');
+      alert('URLを入力してください');
       return;
     }
 
@@ -544,7 +541,6 @@
     autoDetectGenre(body);
   }
 
-  // 自動ジャンル検出（本文から判定、見つからなければ「その他」）
   function autoDetectGenre(extraText = '') {
     const text = (document.getElementById('urlInput').value + ' ' + extraText).toLowerCase();
     let foundGenre = 'その他';
@@ -573,7 +569,6 @@
     renderLinks();
   }
 
-  // 保存処理
   function addLink() {
     const urlInput = document.getElementById('urlInput');
     const memoInput = document.getElementById('memoInput');
@@ -602,7 +597,6 @@
     links.unshift(newLink);
     saveAndRender();
 
-    // 入力エリア初期化（メモ欄も空欄にリセット）
     urlInput.value = '';
     memoInput.value = '';
     fetchedBodyText = '';
