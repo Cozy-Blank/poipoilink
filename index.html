@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>poipoilink - Xポストテキスト化 & WEBストック</title>
+  <title>自動判定テキスト化 - poipoilink</title>
   <style>
     :root {
       --primary: #ec4899;
@@ -45,10 +45,20 @@
     }
 
     header h1 {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: var(--primary-dark);
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+    }
+
+    header .sub-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 2px;
       letter-spacing: 0.05em;
+      opacity: 0.85;
     }
 
     .container {
@@ -82,7 +92,7 @@
       padding: 0 6px;
     }
 
-    input[type="text"], textarea {
+    input[type="text"], textarea, select {
       width: 100%;
       border: none;
       background: transparent;
@@ -93,7 +103,12 @@
 
     textarea {
       resize: vertical;
-      min-height: 80px;
+      min-height: 70px;
+    }
+
+    select {
+      font-weight: 700;
+      cursor: pointer;
     }
 
     .btn-fetch {
@@ -127,11 +142,17 @@
       margin-bottom: 12px;
     }
 
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
     .preview-author {
       font-size: 0.8rem;
       font-weight: 800;
       color: var(--text-muted);
-      margin-bottom: 6px;
     }
 
     .preview-body {
@@ -168,61 +189,6 @@
     .btn-save {
       background: var(--primary-dark);
       color: #fff;
-    }
-
-    /* タグ選択 */
-    .section-label {
-      font-size: 0.8rem;
-      font-weight: 800;
-      color: var(--primary-dark);
-      margin-bottom: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .auto-hint {
-      font-size: 0.7rem;
-      font-weight: normal;
-      color: var(--primary-dark);
-      opacity: 0.8;
-    }
-
-    .type-selector-wrapper {
-      overflow-x: auto;
-      margin-bottom: 12px;
-      padding-bottom: 6px;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .type-selector-wrapper::-webkit-scrollbar {
-      display: none;
-    }
-
-    .type-selector {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .type-btn {
-      padding: 6px 12px;
-      border: 1.5px solid var(--border-color);
-      border-radius: 16px;
-      background: #fff;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-
-    .type-btn.selected {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary-dark);
-      box-shadow: 0 2px 4px rgba(236, 72, 153, 0.2);
     }
 
     /* フィルタータブ */
@@ -288,16 +254,10 @@
       justify-content: space-between;
     }
 
-    .badge-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
     .badge {
-      font-size: 0.7rem;
-      padding: 3px 8px;
-      border-radius: 6px;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 8px;
       font-weight: 800;
       background: var(--primary-light);
       color: var(--primary-dark);
@@ -309,6 +269,17 @@
       word-break: break-all;
       color: var(--text-main);
       line-height: 1.5;
+    }
+
+    .task-memo {
+      font-size: 0.8rem;
+      color: #475569;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 6px 10px;
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+      white-space: pre-wrap;
+      word-break: break-all;
     }
 
     .link-box {
@@ -324,7 +295,7 @@
       border-radius: 8px;
       word-break: break-all;
       width: fit-content;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     .item-actions {
@@ -362,7 +333,8 @@
 <body>
 
 <header>
-  <h1>🖤 Xポスト テキスト化 & poipoilink</h1>
+  <h1>自動判定テキスト化</h1>
+  <div class="sub-title">poipoilink</div>
 </header>
 
 <div class="container">
@@ -370,7 +342,7 @@
   <div class="card">
     <fieldset class="fieldset">
       <legend>XのポストURLを貼り付け</legend>
-      <input type="text" id="urlInput" placeholder="https://x.com/username/status/..." oninput="autoDetectTags()">
+      <input type="text" id="urlInput" placeholder="https://x.com/username/status/..." oninput="autoDetectGenre()">
     </fieldset>
 
     <button class="btn-fetch" onclick="fetchPostText()">
@@ -379,7 +351,9 @@
 
     <!-- 取得テキスト プレビュー画面 -->
     <div class="preview-card" id="previewArea" style="display: none;">
-      <div class="preview-author" id="previewAuthor">ユーザー名</div>
+      <div class="preview-header">
+        <div class="preview-author" id="previewAuthor">ユーザー名</div>
+      </div>
       <div class="preview-body" id="previewBody">ここに本文が入ります</div>
       <div class="action-row">
         <button class="btn-action btn-copy" onclick="copyText()">📋 コピー</button>
@@ -387,32 +361,31 @@
       </div>
     </div>
 
+    <!-- ジャンル選択（自動判定 & プルダウンで変更可） -->
     <fieldset class="fieldset">
-      <legend>メモ（直接入力も可）</legend>
-      <textarea id="memoInput" placeholder="本文やメモを入力..." oninput="autoDetectTags()"></textarea>
+      <legend>ジャンル（自動判定・変更可能）</legend>
+      <select id="genreSelect">
+        <option value="学び">📚 学び</option>
+        <option value="オンラインサロン">💬 オンラインサロン</option>
+        <option value="健康">🌿 健康</option>
+        <option value="防災">⛑️ 防災</option>
+        <option value="暮らし">🏠 暮らし</option>
+        <option value="アイデア">💡 アイデア</option>
+        <option value="レシピ">🍳 レシピ</option>
+        <option value="カスタムAI">🤖 カスタムAI</option>
+        <option value="法律">⚖️ 法律</option>
+        <option value="お金">💰 お金</option>
+        <option value="読書映画">🎬 読書映画</option>
+        <option value="法則">🔍 法則</option>
+        <option value="その他" selected>✨ その他</option>
+      </select>
     </fieldset>
 
-    <span class="section-label">
-      タグ（自動判定・手動変更可）
-      <span class="auto-hint">※複数選択OK</span>
-    </span>
-
-    <div class="type-selector-wrapper">
-      <div class="type-selector" id="tagSelector">
-        <button class="type-btn" data-tag="学び" onclick="toggleTag(this)">📚 学び</button>
-        <button class="type-btn" data-tag="健康" onclick="toggleTag(this)">🌿 健康</button>
-        <button class="type-btn" data-tag="防災" onclick="toggleTag(this)">⛑️ 防災</button>
-        <button class="type-btn" data-tag="暮らし" onclick="toggleTag(this)">🏠 暮らし</button>
-        <button class="type-btn" data-tag="アイデア" onclick="toggleTag(this)">💡 アイデア</button>
-        <button class="type-btn" data-tag="レシピ" onclick="toggleTag(this)">🍳 レシピ</button>
-        <button class="type-btn" data-tag="カスタムAI" onclick="toggleTag(this)">🤖 カスタムAI</button>
-        <button class="type-btn" data-tag="法律" onclick="toggleTag(this)">⚖️ 法律</button>
-        <button class="type-btn" data-tag="お金" onclick="toggleTag(this)">💰 お金</button>
-        <button class="type-btn" data-tag="読書映画" onclick="toggleTag(this)">🎬 読書映画</button>
-        <button class="type-btn" data-tag="法則" onclick="toggleTag(this)">🔍 法則</button>
-        <button class="type-btn" data-tag="その他" onclick="toggleTag(this)">✨ その他</button>
-      </div>
-    </div>
+    <!-- メモ欄（基本空欄） -->
+    <fieldset class="fieldset">
+      <legend>メモ（空欄のままでもOK）</legend>
+      <textarea id="memoInput" placeholder="メモを入力..."></textarea>
+    </fieldset>
 
     <button class="btn-action btn-save" style="width:100%; justify-content:center; padding:12px; font-size:0.95rem;" onclick="addLink()">
       💾 直接リストに保存する
@@ -424,6 +397,7 @@
     <div class="tabs" id="filterTabs">
       <div class="tab active" onclick="setFilter('all', this)">すべて</div>
       <div class="tab" onclick="setFilter('学び', this)">📚 学び</div>
+      <div class="tab" onclick="setFilter('オンラインサロン', this)">💬 オンラインサロン</div>
       <div class="tab" onclick="setFilter('健康', this)">🌿 健康</div>
       <div class="tab" onclick="setFilter('防災', this)">⛑️ 防災</div>
       <div class="tab" onclick="setFilter('暮らし', this)">🏠 暮らし</div>
@@ -443,38 +417,35 @@
 </div>
 
 <script>
-  let manualTags = [];
   let currentFilter = 'all';
   let fetchedAuthor = '';
   let fetchedBodyText = '';
   let links = JSON.parse(localStorage.getItem('poipoilinks') || '[]');
 
-  // ジャンルごとの自動判定キーワード辞書
+  // ジャンル自動判定キーワード
   const keywordMap = {
+    'オンラインサロン': ['サロン', 'コミュニティ', 'メンバー', 'オフ会', '限定配信', 'discord', 'slack'],
     '学び': ['学び', '自己啓発', 'マインド', '思考', '勉強', '学習', '習慣', '成長', '成功', 'モチベーション', '読書', '知識', 'スキル', '心理学', '哲学'],
     '健康': ['健康', '睡眠', '食事', '栄養', '運動', '筋トレ', 'ダイエット', 'メンタル', 'ヘルス', '予防', '医療', 'ストレッチ', 'ヨガ'],
     '防災': ['防災', '地震', '災害', '避難', '備蓄', 'ハザード', '台風', '救急', '安全', '緊急'],
     '暮らし': ['暮らし', '生活', '掃除', '収納', 'インテリア', '家事', '便利グッズ', '断捨離', 'ライフハック', '部屋'],
     'アイデア': ['アイデア', 'ひらめき', '企画', '発想', 'デザイン', 'クリエイティブ', 'ブレスト', '改善', '仕組み'],
     'レシピ': ['レシピ', '料理', '献立', 'ごはん', 'スイーツ', '時短料理', '作り置き', 'おやつ', 'クッキング', '美味しい'],
-    'カスタムAI': ['AI', 'カスタムAI', 'ChatGPT', 'Prompt', 'プロンプト', 'Claude', 'Gemini', '生成AI', 'GPT', '自動化', 'LLM'],
+    'カスタムAI': ['ai', 'カスタムai', 'chatgpt', 'prompt', 'プロンプト', 'claude', 'gemini', '生成ai', 'gpt', '自動化', 'llm'],
     '法律': ['法律', '契約', '規約', '著作権', '権利', '弁護士', '法務', '労働法', 'コンプライアンス', 'ルール'],
-    'お金': ['お金', '投資', '節約', '貯金', '資産運用', '税金', '株', 'NISA', '副業', '会計', 'マネー', '家計', 'btc', 'bitcoin', '暗号資産', '仮想通貨'],
+    'お金': ['お金', '投資', '節約', '貯金', '資産運用', '税金', '株', 'nisa', '副業', '会計', 'マネー', '家計', 'btc', 'bitcoin', '暗号資産', '仮想通貨'],
     '読書映画': ['読書', '映画', '本', 'シネマ', '小説', 'レビュー', '感想', 'おすすめ本', '映画鑑賞', 'アニメ', 'ドラマ'],
     '法則': ['法則', '密議', '象徴', '智慧', 'フリーメーソン', '神殿', 'pi', '重力', 'ポリフォニック', '倍音', 'フィボナッチ', '黄金比', 'オクターブ', '宇宙', '波動', '原理', '真理']
   };
 
-  // ポストURLから status ID やユーザー名、URL正規化を行う関数
   function normalizeXUrl(inputUrl) {
     let url = inputUrl.trim();
-    // x.com -> twitter.com に変換（APIの互換性のため）
     url = url.replace('https://x.com/', 'https://twitter.com/').replace('http://x.com/', 'https://twitter.com/');
-    // URLクエリパラメータ(?s=20など)を除去
     url = url.split('?')[0];
     return url;
   }
 
-  // 本文自動取得機能（多重API＋フォールバック構造）
+  // 本文取得機能
   async function fetchPostText() {
     const rawUrl = document.getElementById('urlInput').value.trim();
     if (!rawUrl) {
@@ -492,7 +463,7 @@
 
     const targetUrl = normalizeXUrl(rawUrl);
 
-    // 方法1: FxTwitter / FixupX API (長文取得・全文取得に最適)
+    // 1. FxTwitter / FixupX API
     try {
       const match = targetUrl.match(/status\/(\d+)/);
       if (match && match[1]) {
@@ -503,26 +474,20 @@
           if (data && data.tweet) {
             fetchedAuthor = data.tweet.author ? `${data.tweet.author.name} (@${data.tweet.author.screen_name})` : 'X User';
             fetchedBodyText = data.tweet.text || '';
-            
             showSuccess(fetchedAuthor, fetchedBodyText);
             return;
           }
         }
       }
-    } catch (e) {
-      console.log('FxTwitter API failed, trying oEmbed...');
-    }
+    } catch (e) {}
 
-    // 方法2: Official oEmbed API + corsproxy.io (バックアップ)
+    // 2. oEmbed API + corsproxy
     try {
       const oembedUrl = `https://publish.twitter.com/oembed?url=${encodeURIComponent(targetUrl)}&omit_script=true`;
-      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(oembedUrl)}`;
-      const res = await fetch(proxyUrl);
-      
+      const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(oembedUrl)}`);
       if (res.ok) {
         const json = await res.json();
         fetchedAuthor = json.author_name || 'X User';
-        
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = json.html;
         let text = tempDiv.innerText || tempDiv.textContent || '';
@@ -532,11 +497,9 @@
         showSuccess(fetchedAuthor, fetchedBodyText);
         return;
       }
-    } catch (e) {
-      console.log('oEmbed failed, trying method 3...');
-    }
+    } catch (e) {}
 
-    // 方法3: AllOrigins Proxy (第3のバックアップ)
+    // 3. AllOrigins Proxy
     try {
       const oembedUrl = `https://publish.twitter.com/oembed?url=${encodeURIComponent(targetUrl)}&omit_script=true`;
       const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(oembedUrl)}`);
@@ -553,70 +516,38 @@
         showSuccess(fetchedAuthor, fetchedBodyText);
         return;
       }
-    } catch (e) {
-      console.log('All origins failed too');
-    }
+    } catch (e) {}
 
-    // すべて失敗した場合
     previewAuthor.textContent = 'お知らせ';
-    previewBody.textContent = '本文の自動取得に失敗しました。非公開アカウントか削除された投稿の可能性があります。直接メモ欄に本文を貼り付けて保存してください。';
+    previewBody.textContent = '本文の自動取得に失敗しました。直接メモ欄に内容を入力して保存してください。';
   }
 
   function showSuccess(author, body) {
     document.getElementById('previewAuthor').textContent = author;
     document.getElementById('previewBody').textContent = body;
-    document.getElementById('memoInput').value = body;
-    autoDetectTags();
+    autoDetectGenre(body);
   }
 
-  // クリップボードへコピー
+  // 自動ジャンル検出（本文から判定、見つからなければ「その他」）
+  function autoDetectGenre(extraText = '') {
+    const text = (document.getElementById('urlInput').value + ' ' + extraText).toLowerCase();
+    let foundGenre = 'その他';
+
+    for (const [genre, keywords] of Object.entries(keywordMap)) {
+      if (keywords.some(kw => text.includes(kw.toLowerCase()))) {
+        foundGenre = genre;
+        break;
+      }
+    }
+
+    document.getElementById('genreSelect').value = foundGenre;
+  }
+
   function copyText() {
     if (!fetchedBodyText) return;
     navigator.clipboard.writeText(fetchedBodyText).then(() => {
       alert('本文をコピーしました！');
     });
-  }
-
-  // 自動タグ検出
-  function autoDetectTags() {
-    const text = (document.getElementById('urlInput').value + ' ' + document.getElementById('memoInput').value).toLowerCase();
-    let detected = [];
-    for (const [tag, keywords] of Object.entries(keywordMap)) {
-      if (keywords.some(kw => text.includes(kw.toLowerCase()))) {
-        detected.push(tag);
-      }
-    }
-
-    document.querySelectorAll('#tagSelector .type-btn').forEach(btn => {
-      const tag = btn.dataset.tag;
-      const isSelected = manualTags.includes(tag) || (manualTags.length === 0 && detected.includes(tag));
-      btn.classList.toggle('selected', isSelected);
-    });
-  }
-
-  // タグ選択トグル
-  function toggleTag(btn) {
-    const tag = btn.dataset.tag;
-    let activeTags = getSelectedTagsFromUI();
-
-    if (activeTags.includes(tag)) {
-      activeTags = activeTags.filter(t => t !== tag);
-    } else {
-      activeTags.push(tag);
-    }
-
-    manualTags = [...activeTags];
-    document.querySelectorAll('#tagSelector .type-btn').forEach(b => {
-      b.classList.toggle('selected', manualTags.includes(b.dataset.tag));
-    });
-  }
-
-  function getSelectedTagsFromUI() {
-    const selected = [];
-    document.querySelectorAll('#tagSelector .type-btn.selected').forEach(btn => {
-      selected.push(btn.dataset.tag);
-    });
-    return selected;
   }
 
   function setFilter(filter, element) {
@@ -630,39 +561,38 @@
   function addLink() {
     const urlInput = document.getElementById('urlInput');
     const memoInput = document.getElementById('memoInput');
+    const genreSelect = document.getElementById('genreSelect');
+
     const url = urlInput.value.trim();
-    const memo = memoInput.value.trim() || fetchedBodyText;
+    const memo = memoInput.value.trim();
+    const genre = genreSelect.value || 'その他';
+    const bodyText = fetchedBodyText;
 
-    if (!url && !memo) {
-      alert('URLまたは本文を入力してください');
+    if (!url && !memo && !bodyText) {
+      alert('URL、本文、またはメモを入力してください');
       return;
-    }
-
-    let finalTags = getSelectedTagsFromUI();
-    if (finalTags.length === 0) {
-      finalTags = ['その他'];
     }
 
     const newLink = {
       id: Date.now(),
       url: url,
       author: fetchedAuthor,
-      memo: memo || '無題のストック',
-      tags: finalTags,
+      bodyText: bodyText,
+      memo: memo,
+      genre: genre,
       createdAt: new Date().toLocaleDateString('ja-JP')
     };
 
     links.unshift(newLink);
     saveAndRender();
 
-    // 画面の初期化
+    // 入力エリア初期化（メモ欄も空欄にリセット）
     urlInput.value = '';
     memoInput.value = '';
     fetchedBodyText = '';
     fetchedAuthor = '';
     document.getElementById('previewArea').style.display = 'none';
-    manualTags = [];
-    document.querySelectorAll('#tagSelector .type-btn').forEach(btn => btn.classList.remove('selected'));
+    document.getElementById('genreSelect').value = 'その他';
   }
 
   function deleteLink(id) {
@@ -685,8 +615,8 @@
     const listEl = document.getElementById('linkList');
     const filteredLinks = links.filter(link => {
       if (currentFilter === 'all') return true;
-      const linkTags = link.tags || ['その他'];
-      return linkTags.includes(currentFilter);
+      const linkGenre = link.genre || 'その他';
+      return linkGenre === currentFilter;
     });
 
     if (filteredLinks.length === 0) {
@@ -700,18 +630,19 @@
     }
 
     listEl.innerHTML = filteredLinks.map(link => {
-      const linkTags = link.tags || ['その他'];
-      const badgesHtml = linkTags.map(t => `<span class="badge">${t}</span>`).join('');
+      const displayContent = link.bodyText || link.memo || '無題のストック';
 
       return `
         <div class="task-item">
           <div class="task-header">
-            <div class="badge-container">${badgesHtml}</div>
+            <span class="badge">${escapeHtml(link.genre || 'その他')}</span>
             <span style="font-size:0.75rem; color: var(--text-muted); font-weight:700;">${link.createdAt}</span>
           </div>
           ${link.author ? `<div style="font-size:0.75rem; font-weight:800; color:var(--text-muted);">${escapeHtml(link.author)}</div>` : ''}
-          <div class="task-title">${escapeHtml(link.memo)}</div>
+          <div class="task-title">${escapeHtml(displayContent)}</div>
           
+          ${(link.memo && link.bodyText) ? `<div class="task-memo">💡 <b>メモ:</b> ${escapeHtml(link.memo)}</div>` : ''}
+
           ${link.url ? `
             <div>
               <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="link-box">
@@ -721,7 +652,7 @@
           ` : ''}
 
           <div class="item-actions">
-            <button class="btn-action btn-copy" style="padding:4px 8px;" onclick="copyItemText(\`${escapeHtml(link.memo)}\`)">📋 コピー</button>
+            <button class="btn-action btn-copy" style="padding:4px 8px;" onclick="copyItemText(\`${escapeHtml(displayContent)}\`)">📋 コピー</button>
             <button class="delete-btn" onclick="deleteLink(${link.id})">削除</button>
           </div>
         </div>
