@@ -706,8 +706,7 @@
       }
       saveState();
     }
-
-    function renderCalendar() {
+function renderCalendar() {
       const grid = document.getElementById('calendarGrid');
       if (!grid) return;
       grid.innerHTML = '';
@@ -721,9 +720,11 @@
       while (current <= end) {
         const dateKey = formatDateKey(current);
         const cell = document.createElement('div');
-        const isStamped = !!state.stampedDates[dateKey];
-        const isToday = (dateKey === todayStr);
+        
         const settledVal = state.dailySettlements[dateKey];
+        // タップして選択済み、または精算データがある場合に財布マークを表示
+        const isStamped = !!state.stampedDates[dateKey] || (settledVal !== undefined && settledVal !== null);
+        const isToday = (dateKey === todayStr);
 
         cell.className = `day-cell ${isStamped ? 'active' : ''} ${isToday ? 'is-today' : ''}`;
         
@@ -748,7 +749,6 @@
 
       return remainingCount;
     }
-
     function render() {
       if (document.getElementById('periodType')) document.getElementById('periodType').value = state.periodType;
       if (document.getElementById('startDay')) document.getElementById('startDay').value = state.startDay;
