@@ -6,18 +6,15 @@
   
   <title>偏愛Tool｜日割りメリハリ</title>
   
-  <!-- ★スマホのホーム画面追加時のアイコン設定★ -->
   <link rel="apple-touch-icon" href="https://i.ibb.co/pjGSsHNm/teiku.png">
   <link rel="icon" type="image/png" href="https://i.ibb.co/pjGSsHNm/teiku.png">
 
-  <!-- OGP設定（LINE・SNSシェア用） -->
   <meta property="og:title" content="偏愛Tool｜日割りメリハリ">
   <meta property="og:description" content="買う日、ときどき買わない日">
   <meta property="og:site_name" content="偏愛Tool">
   <meta property="og:image" content="https://i.ibb.co/pjGSsHNm/teiku.png">
   <meta property="og:type" content="website">
   
-  <!-- Twitter (X) 用カード設定 -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="偏愛Tool｜日割りメリハリ">
   <meta name="twitter:description" content="買う日、ときどき買わない日">
@@ -25,22 +22,19 @@
 
   <style>
     :root {
-      --bg-color: #f3f0f7;            /* ライトパープルグレー */
-      --card-bg: #ffffff;              /* カード背景 */
-      --primary: #522b80;              /* メインカラー（ディープパープル） */
-      --primary-dark: #351759;        /* 濃い紫 */
-      --accent-blue: #00875a;          /* 精算ボタン（緑系） */
+      --bg-color: #f3f0f7;
+      --card-bg: #ffffff;
+      --primary: #522b80;
+      --primary-dark: #351759;
+      --accent-blue: #00875a;
       --accent-blue-dark: #005c3d;
-      
-      /* ブースト用ピンク系カラー */
-      --accent-pink: #d81b60;          /* メインピンク（ベリーピンク） */
-      --accent-pink-bg: #fff0f5;      /* 薄いピンク背景 */
-      --accent-pink-border: #f8bbd0;  /* 枠線用ライトピンク */
-
-      --text-main: #271a38;            /* メイン文字色 */
-      --text-muted: #7b6d8c;          /* 補足文字色 */
-      --border-color: #d5c3e5;        /* 枠線カラー */
-      --calc-bg: #f5eeeb;              /* 電卓エリア背景 */
+      --accent-pink: #d81b60;
+      --accent-pink-bg: #fff0f5;
+      --accent-pink-border: #f8bbd0;
+      --text-main: #271a38;
+      --text-muted: #7b6d8c;
+      --border-color: #d5c3e5;
+      --calc-bg: #f5eeeb;
       --radius: 20px;
     }
 
@@ -70,7 +64,6 @@
       gap: 14px;
     }
 
-    /* 長方形イラスト枠（一番上に配置） */
     .header-banner-wrapper {
       width: 100%;
       margin-bottom: 2px;
@@ -119,7 +112,7 @@
       background: var(--calc-bg);
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      aspect-ratio: 0.85;
+      min-height: 52px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -142,7 +135,7 @@
     }
 
     .day-number {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 800;
       color: var(--text-muted);
     }
@@ -152,12 +145,14 @@
     }
 
     .stamp-icon {
-      font-size: 0.85rem;
+      font-size: 1.1rem;
       line-height: 1;
+      min-height: 1.2rem;
+      display: block;
     }
 
     .day-amount {
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       font-weight: 800;
       color: var(--primary-dark);
       white-space: nowrap;
@@ -166,7 +161,6 @@
       max-width: 100%;
     }
 
-    /* 下部仕分けエリア */
     .card-compact {
       background: #faf7fc;
       border: 2px solid var(--border-color);
@@ -177,7 +171,6 @@
       justify-content: space-between;
     }
 
-    /* ブースト専用カード */
     .card-boost-frame {
       background: var(--accent-pink-bg);
       border: 2px solid var(--accent-pink-border);
@@ -237,7 +230,6 @@
       margin-left: 2px;
     }
 
-    /* メイン電卓入力エリア */
     .calc-area {
       margin-top: 10px;
       background: var(--calc-bg);
@@ -313,7 +305,6 @@
       background: var(--accent-blue-dark);
     }
 
-    /* フォーム共通スタイル */
     .form-select, .form-input {
       padding: 6px 8px;
       border-radius: 8px;
@@ -329,7 +320,6 @@
       width: 110px;
     }
 
-    /* タスクメモ・買い物リスト */
     .task-input-container {
       display: flex;
       gap: 6px;
@@ -407,7 +397,6 @@
     .badge-buy { background: #f0eaf7; color: var(--primary); }
     .badge-todo { background: #fce4ec; color: var(--accent-pink); }
 
-    /* ポップアップ（モーダル）スタイル */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -434,14 +423,13 @@
 <body>
 
   <div class="app-container">
-    <!-- 最上部：ヘッダーイラスト -->
     <div class="header-banner-wrapper">
       <div class="header-banner">
         <img src="https://i.ibb.co/pjGSsHNm/teiku.png" alt="ヘッダー画像" class="header-img">
       </div>
     </div>
 
-    <!-- 0. カレンダー（使う日スタンプ帳） -->
+    <!-- カレンダー（使う日スタンプ帳） -->
     <div class="card">
       <div class="card-title">
         <span>👛 使う日スタンプ帳</span>
@@ -450,7 +438,7 @@
       <div class="calendar-grid" id="calendarGrid"></div>
     </div>
 
-    <!-- 1. メイン電卓＆予算カード -->
+    <!-- 電卓＆予算カード -->
     <div class="card">
       <div id="periodRangeText" style="text-align: center; color: var(--primary-dark); font-weight: 700; font-size: 0.8rem; margin-bottom: 4px;">
         対象期間: ----/--/-- 〜 ----/--/--
@@ -461,7 +449,6 @@
         <span class="unit">円</span>
       </div>
 
-      <!-- メイン配置の電卓＆加算エリア -->
       <div class="calc-area">
         <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">本日の買い物・利用額を入力</div>
         <div id="calcDisplay" class="calc-display">0</div>
@@ -487,16 +474,13 @@
           <button class="calc-btn" onclick="calcInput('3')">3</button>
           <button class="calc-btn" onclick="calcInput('0')">0</button>
 
-          <!-- ブーストボタン -->
           <button class="calc-btn boost" onclick="openBoostModal()" style="grid-column: span 2;">💖 ブースト</button>
         </div>
 
-        <!-- 「残りの生活費」 -->
         <div class="sub-stat-row">
           <div>残りの生活費: <span id="remainingBudget" class="sub-stat-val">0</span> 円</div>
         </div>
 
-        <!-- 本日累計＆精算ボタン -->
         <div class="settle-action-row">
           <div style="font-size: 0.85rem; font-weight: 800; color: var(--primary-dark);">
             本日累計: <span id="todaySpentSum">0</span> 円
@@ -506,7 +490,6 @@
           </div>
         </div>
 
-        <!-- 精算完了バッジ & オールリセット -->
         <div id="settledBadge" style="display: none; flex-direction: column; gap: 8px; margin-top: 8px; padding: 10px; background: var(--border-color); border-radius: 10px;">
           <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
             <span style="font-size: 0.85rem; font-weight: 800; color: var(--primary-dark);">本日精算完了！</span>
@@ -519,7 +502,7 @@
       </div>
     </div>
 
-    <!-- 2. 買い物予定・ToDoリストカード -->
+    <!-- 買い物予定・ToDoリスト -->
     <div class="card">
       <div class="card-title">🛒 買い物予定・ToDoリスト</div>
       <div class="task-input-container">
@@ -533,11 +516,10 @@
       <ul class="task-list" id="taskList"></ul>
     </div>
 
-    <!-- 3. 期間・予算の設定カード -->
+    <!-- 期間・予算の設定 -->
     <div class="card">
       <div class="card-title">期間・予算の設定</div>
       
-      <!-- 集計の範囲 -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <span style="font-size: 0.85rem; font-weight: 700;">集計の範囲</span>
         <select id="periodType" class="form-select" onchange="updateSettings()">
@@ -547,26 +529,22 @@
         </select>
       </div>
 
-      <!-- 自由日付指定 -->
       <div id="customRangeRow" style="display: none; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 10px;">
         <input type="date" id="startDate" class="form-input" onchange="updateSettings()" style="width: 45%;">
         〜
         <input type="date" id="endDate" class="form-input" onchange="updateSettings()" style="width: 45%;">
       </div>
 
-      <!-- 締め日指定 -->
       <div id="startDayRow" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <span style="font-size: 0.85rem; font-weight: 700;">開始日（毎月）</span>
         <input type="number" id="startDay" class="form-input form-input-number" oninput="updateSettings()" style="width: 80px;">
       </div>
 
-      <!-- 手元管理費 -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <span style="font-size: 0.85rem; font-weight: 700;">手元管理費</span>
         <input type="number" id="inputTotal" class="form-input form-input-number" oninput="updateSettings()">
       </div>
 
-      <!-- 大型出費（金額＋用途メモ） -->
       <div style="margin-bottom: 10px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
           <span style="font-size: 0.85rem; font-weight: 700;">大型出費 (事前除外)</span>
@@ -578,9 +556,7 @@
       </div>
     </div>
 
-    <!-- 4. 期間終了後の余剰金仕分けエリア -->
-    
-    <!-- (1) 全体精算後の残り -->
+    <!-- 余剰金仕分け -->
     <div class="card-compact">
       <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-dark);">全体精算後の残り (余剰金)</div>
       <div>
@@ -589,7 +565,6 @@
       </div>
     </div>
 
-    <!-- (2) 来月のご偏愛ブーストにまわす -->
     <div class="card-boost-frame">
       <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-pink);">💖 来月のご偏愛ブーストにまわす</div>
       <div style="display: flex; align-items: center; gap: 4px;">
@@ -598,7 +573,6 @@
       </div>
     </div>
 
-    <!-- (3) 残りは貯金箱へ -->
     <div class="card-piggy">
       <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">🐷 残りは貯金箱へ</div>
       <div>
@@ -609,7 +583,6 @@
 
   </div>
 
-  <!-- ブースト用ポップアップモーダル -->
   <div id="boostModal" class="modal-overlay">
     <div class="modal-content">
       <h3 style="font-size: 1.05rem; color: var(--accent-pink); margin-bottom: 8px;">💖 ご偏愛ブースト発動</h3>
@@ -649,8 +622,8 @@
       rewardFrame: 0,
       boostBonus: 0,
       tasks: [],
-      stampedDates: {},      // YYYY-MM-DD: true/false
-      dailySettlements: {}  // YYYY-MM-DD: 精算確定金額
+      stampedDates: {},
+      dailySettlements: {}
     };
 
     let state = JSON.parse(localStorage.getItem('nmd_app_state_v6') || 'null') || {...defaultState};
@@ -706,7 +679,8 @@
       }
       saveState();
     }
-function renderCalendar() {
+
+    function renderCalendar() {
       const grid = document.getElementById('calendarGrid');
       if (!grid) return;
       grid.innerHTML = '';
@@ -715,14 +689,12 @@ function renderCalendar() {
       const todayStr = formatDateKey(new Date());
 
       let current = new Date(start);
-      let remainingCount = 0;
 
       while (current <= end) {
         const dateKey = formatDateKey(current);
         const cell = document.createElement('div');
         
         const settledVal = state.dailySettlements[dateKey];
-        // タップして選択済み、または精算データがある場合に財布マークを表示
         const isStamped = !!state.stampedDates[dateKey] || (settledVal !== undefined && settledVal !== null);
         const isToday = (dateKey === todayStr);
 
@@ -740,15 +712,10 @@ function renderCalendar() {
         cell.onclick = () => toggleStamp(dateKey);
         grid.appendChild(cell);
 
-        if (current >= new Date(new Date().setHours(0,0,0,0)) && isStamped) {
-          remainingCount++;
-        }
-
         current.setDate(current.getDate() + 1);
       }
-
-      return remainingCount;
     }
+
     function render() {
       if (document.getElementById('periodType')) document.getElementById('periodType').value = state.periodType;
       if (document.getElementById('startDay')) document.getElementById('startDay').value = state.startDay;
@@ -771,23 +738,19 @@ function renderCalendar() {
         periodRangeEl.innerText = `対象期間: ${formatDateDisplay(start)} 〜 ${formatDateDisplay(end)}`;
       }
 
-      // 過去に確定した精算合計を算出
       let pastSettledTotal = 0;
       Object.values(state.dailySettlements).forEach(amt => {
         pastSettledTotal += Number(amt) || 0;
       });
 
-      // 残り予算 ＝ 手元管理費 - 大型出費 - 確定した過去の精算合計 - 本日入力中の費用
       const baseBudget = (state.totalBudget || 0) - (state.bigExpense || 0);
       const remainingBudget = Math.max(0, baseBudget - pastSettledTotal - state.todaySpentTotal);
 
-      // カレンダー描画
       renderCalendar();
 
       if (document.getElementById('remainingBudget')) document.getElementById('remainingBudget').innerText = remainingBudget.toLocaleString();
       if (document.getElementById('todaySpentSum')) document.getElementById('todaySpentSum').innerText = state.todaySpentTotal.toLocaleString();
 
-      // メイン予算表示（大型出費除外後の手元予算／残り予算）
       const totalTodayBudget = Math.max(0, remainingBudget + (state.boostBonus || 0));
       if (document.getElementById('todayBudget')) document.getElementById('todayBudget').innerText = totalTodayBudget.toLocaleString();
 
@@ -920,12 +883,9 @@ function renderCalendar() {
       }
       if (!state.isSettledToday) {
         state.isSettledToday = true;
-        
-        // 今日の日付キーに精算額を保存
         const todayStr = formatDateKey(new Date());
         state.dailySettlements[todayStr] = state.todaySpentTotal;
-        state.stampedDates[todayStr] = true; // 精算時はスタンプON
-        
+        state.stampedDates[todayStr] = true;
         state.boostBonus = 0;
       }
       saveState();
@@ -935,7 +895,6 @@ function renderCalendar() {
       if (confirm('本日の精算を取り消しますか？')) {
         const todayStr = formatDateKey(new Date());
         delete state.dailySettlements[todayStr];
-        
         state.todaySpentTotal = 0;
         state.isSettledToday = false;
         saveState();
