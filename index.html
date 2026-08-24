@@ -119,11 +119,12 @@
       background: var(--calc-bg);
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      aspect-ratio: 1;
+      aspect-ratio: 0.85;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      padding: 4px 2px;
       cursor: pointer;
       position: relative;
       user-select: none;
@@ -140,12 +141,8 @@
       border: 2px solid var(--accent-pink);
     }
 
-    .day-cell.past {
-      opacity: 0.55;
-    }
-
     .day-number {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 800;
       color: var(--text-muted);
     }
@@ -155,9 +152,18 @@
     }
 
     .stamp-icon {
-      font-size: 1rem;
+      font-size: 0.85rem;
       line-height: 1;
-      margin-top: 2px;
+    }
+
+    .day-amount {
+      font-size: 0.6rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
 
     /* 下部仕分けエリア */
@@ -216,11 +222,11 @@
 
     .sub-stat-row {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       margin-top: 10px;
       padding-top: 6px;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
       border-top: 1px dashed var(--border-color);
     }
@@ -444,12 +450,8 @@
       <div class="calendar-grid" id="calendarGrid"></div>
     </div>
 
-    <!-- 1. 本日の使える予算カード -->
+    <!-- 1. メイン電卓＆予算カード -->
     <div class="card">
-      <div class="card-title">
-        <span>本日の使える予算</span>
-        <span style="color: var(--primary-dark); font-size: 0.75rem;">自動計算中</span>
-      </div>
       <div id="periodRangeText" style="text-align: center; color: var(--primary-dark); font-weight: 700; font-size: 0.8rem; margin-bottom: 4px;">
         対象期間: ----/--/-- 〜 ----/--/--
       </div>
@@ -489,9 +491,8 @@
           <button class="calc-btn boost" onclick="openBoostModal()" style="grid-column: span 2;">💖 ブースト</button>
         </div>
 
-        <!-- 「残り使う日」「残りの生活費」 -->
+        <!-- 「残りの生活費」 -->
         <div class="sub-stat-row">
-          <div>残り「使う日」: <span id="remainingDays" class="sub-stat-val">0</span> 日</div>
           <div>残りの生活費: <span id="remainingBudget" class="sub-stat-val">0</span> 円</div>
         </div>
 
@@ -643,22 +644,23 @@
       totalBudget: 80000,
       bigExpense: 10000,
       bigExpenseMemo: '',
-      remainingBudget: 70000,
       todaySpentTotal: 0,
       isSettledToday: false,
       rewardFrame: 0,
       boostBonus: 0,
       tasks: [],
-      stampedDates: {} // YYYY-MM-DD: true/false
+      stampedDates: {},      // YYYY-MM-DD: true/false
+      dailySettlements: {}  // YYYY-MM-DD: 精算確定金額
     };
 
-    let state = JSON.parse(localStorage.getItem('nmd_app_state_v5') || 'null') || {...defaultState};
+    let state = JSON.parse(localStorage.getItem('nmd_app_state_v6') || 'null') || {...defaultState};
     if (!state.stampedDates) state.stampedDates = {};
+    if (!state.dailySettlements) state.dailySettlements = {};
 
     let calcExpr = '0';
 
     function saveState() {
-      localStorage.setItem('nmd_app_state_v5', JSON.stringify(state));
+      localStorage.setItem('nmd_app_state_v6', JSON.stringify(state));
       render();
     }
 
@@ -721,19 +723,22 @@
         const cell = document.createElement('div');
         const isStamped = !!state.stampedDates[dateKey];
         const isToday = (dateKey === todayStr);
+        const settledVal = state.dailySettlements[dateKey];
 
         cell.className = `day-cell ${isStamped ? 'active' : ''} ${isToday ? 'is-today' : ''}`;
         
         const dayNum = current.getDate();
+        const amtText = (settledVal !== undefined && settledVal !== null) ? `${settledVal.toLocaleString()}円` : '';
+
         cell.innerHTML = `
           <span class="day-number">${dayNum}</span>
           <span class="stamp-icon">${isStamped ? '👛' : ''}</span>
+          <span class="day-amount">${amtText}</span>
         `;
 
         cell.onclick = () => toggleStamp(dateKey);
         grid.appendChild(cell);
 
-        // 今日の日付以降でスタンプが押されている日数を「残り使う日」として算出
         if (current >= new Date(new Date().setHours(0,0,0,0)) && isStamped) {
           remainingCount++;
         }
@@ -766,17 +771,24 @@
         periodRangeEl.innerText = `対象期間: ${formatDateDisplay(start)} 〜 ${formatDateDisplay(end)}`;
       }
 
-      // カレンダー描画と「残り使う日」の取得
+      // 過去に確定した精算合計を算出
+      let pastSettledTotal = 0;
+      Object.values(state.dailySettlements).forEach(amt => {
+        pastSettledTotal += Number(amt) || 0;
+      });
+
+      // 残り予算 ＝ 手元管理費 - 大型出費 - 確定した過去の精算合計 - 本日入力中の費用
+      const baseBudget = (state.totalBudget || 0) - (state.bigExpense || 0);
+      const remainingBudget = Math.max(0, baseBudget - pastSettledTotal - state.todaySpentTotal);
+
+      // カレンダー描画と「残り使う日」取得
       const remainingDaysCount = renderCalendar();
 
-      const displayRemainingBudget = Math.max(0, state.remainingBudget);
-
-      if (document.getElementById('remainingDays')) document.getElementById('remainingDays').innerText = remainingDaysCount;
-      if (document.getElementById('remainingBudget')) document.getElementById('remainingBudget').innerText = displayRemainingBudget.toLocaleString();
+      if (document.getElementById('remainingBudget')) document.getElementById('remainingBudget').innerText = remainingBudget.toLocaleString();
       if (document.getElementById('todaySpentSum')) document.getElementById('todaySpentSum').innerText = state.todaySpentTotal.toLocaleString();
 
-      const baseTodayBudget = remainingDaysCount > 0 ? Math.floor(displayRemainingBudget / remainingDaysCount) : 0;
-      const totalTodayBudget = Math.max(0, baseTodayBudget + (state.boostBonus || 0));
+      // メイン予算表示（大型出費除外後の手元予算／残り予算）
+      const totalTodayBudget = Math.max(0, remainingBudget + (state.boostBonus || 0));
       if (document.getElementById('todayBudget')) document.getElementById('todayBudget').innerText = totalTodayBudget.toLocaleString();
 
       const settleActionBox = document.getElementById('settleActionBox');
@@ -790,7 +802,7 @@
         if (settledBadge) settledBadge.style.display = 'none';
       }
 
-      const finalSurplus = Math.max(0, state.remainingBudget);
+      const finalSurplus = remainingBudget;
       if (document.getElementById('finalSurplus')) document.getElementById('finalSurplus').innerText = finalSurplus.toLocaleString();
       if (document.getElementById('inputRewardFrame')) document.getElementById('inputRewardFrame').value = state.rewardFrame;
 
@@ -829,8 +841,6 @@
       state.totalBudget = Number(document.getElementById('inputTotal')?.value) || 0;
       state.bigExpense = Number(document.getElementById('inputBigExpense')?.value) || 0;
       state.bigExpenseMemo = document.getElementById('inputBigExpenseMemo')?.value || '';
-
-      state.remainingBudget = state.totalBudget - state.bigExpense - state.todaySpentTotal;
 
       saveState();
     }
@@ -895,7 +905,6 @@
 
         if (val > 0) {
           state.todaySpentTotal += val;
-          state.remainingBudget -= val;
           calcExpr = '0';
           updateCalcDisplay();
           saveState();
@@ -911,6 +920,12 @@
       }
       if (!state.isSettledToday) {
         state.isSettledToday = true;
+        
+        // 今日の日付キーに精算額を保存
+        const todayStr = formatDateKey(new Date());
+        state.dailySettlements[todayStr] = state.todaySpentTotal;
+        state.stampedDates[todayStr] = true; // 精算時はスタンプON
+        
         state.boostBonus = 0;
       }
       saveState();
@@ -918,7 +933,9 @@
 
     function unsettle() {
       if (confirm('本日の精算を取り消しますか？')) {
-        state.remainingBudget += state.todaySpentTotal;
+        const todayStr = formatDateKey(new Date());
+        delete state.dailySettlements[todayStr];
+        
         state.todaySpentTotal = 0;
         state.isSettledToday = false;
         saveState();
