@@ -1,9 +1,19 @@
-https://poipoilink.vercel.app/<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>自動判定テキスト化 - poipoilink</title>
+  <title>poipoilink</title>
+
+  <!-- スマホのホーム画面に追加したときのアイコン設定 -->
+  <!-- お好きな画像のURLに差し替えてください -->
+  <link rel="apple-touch-icon" href="https://i.ibb.co/zTV2X8vK/SNS.png">
+  <link rel="icon" sizes="192x192" href="https://i.ibb.co/zTV2X8vK/SNS.png">
+  <!-- WEBアプリ化（フルスクリーン表示）の設定 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="poipoilink">
+
   <style>
     :root {
       --primary: #ec4899;
@@ -32,48 +42,18 @@ https://poipoilink.vercel.app/<!DOCTYPE html>
       padding-bottom: 40px;
     }
 
-    /* ヘッダー */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border-color);
-      padding: 14px 16px;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(236, 72, 153, 0.05);
-    }
-
-    header h1 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--primary-dark);
-      letter-spacing: 0.03em;
-      line-height: 1.2;
-    }
-
-    header .sub-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-top: 2px;
-      letter-spacing: 0.05em;
-      opacity: 0.85;
-    }
-
     .container {
       max-width: 600px;
       margin: 0 auto;
-      padding: 12px 12px 0 12px;
+      padding: 16px 12px 0 12px;
     }
 
-    /* 上段固定イラストバナー */
-   /* 上段固定イラストバナー */
+    /* 最上部イラストバナー */
     .top-banner-card {
       width: 100%;
-      aspect-ratio: 3.2 / 1; /* ★高さ固定を廃止し、横幅に応じた絶妙な比率に設定 */
-      max-height: 180px;      /* PCでも広がりすぎない上限設定 */
-      min-height: 110px;      /* スマホでも小さくなりすぎない下限設定 */
+      aspect-ratio: 3.2 / 1;
+      max-height: 180px;
+      min-height: 110px;
       background-color: #ffffff;
       background-image: var(--banner-image-url);
       background-size: cover;
@@ -347,13 +327,8 @@ https://poipoilink.vercel.app/<!DOCTYPE html>
 </head>
 <body>
 
-<header>
-  <h1>自動判定テキスト化</h1>
-  <div class="sub-title">poipoilink</div>
-</header>
-
 <div class="container">
-  <!-- 上段固定イラストエリア -->
+  <!-- 最上部イラストエリア -->
   <div class="top-banner-card"></div>
 
   <!-- 入力フォーム -->
