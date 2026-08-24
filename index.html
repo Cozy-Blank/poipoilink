@@ -7,8 +7,8 @@
 
   <!-- スマホのホーム画面に追加したときのアイコン設定 -->
   <!-- お好きな画像のURLに差し替えてください -->
-  <link rel="apple-touch-icon" href="https://i.ibb.co/k2j20Y2H/image.png">
-  <link rel="icon" sizes="192x192" href="https://i.ibb.co/k2j20Y2H/image.png">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/zTV2X8vK/SNS.png">
+  <link rel="icon" sizes="192x192" href="https://i.ibb.co/zTV2X8vK/SNS.png">
   <!-- WEBアプリ化（フルスクリーン表示）の設定 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -356,25 +356,20 @@
 
     <!-- ジャンル選択 -->
     <fieldset class="fieldset">
-      <legend>ジャンル（自動判定・変更可能）</legend>
-      <select id="genreSelect">
-        <option value="学び">📚 学び</option>
-        <option value="オンラインサロン">💬 オンラインサロン</option>
-        <option value="社会問題">🌐 社会問題</option>
-        <option value="健康">🌿 健康</option>
-        <option value="防災">⛑️ 防災</option>
-        <option value="暮らし">🏠 暮らし</option>
-        <option value="アイデア">💡 アイデア</option>
-        <option value="レシピ">🍳 レシピ</option>
-        <option value="カスタムAI">🤖 カスタムAI</option>
-        <option value="法律">⚖️ 法律</option>
-        <option value="お金">💰 お金</option>
-        <option value="読書映画">🎬 読書映画</option>
-        <option value="法則">🔍 法則</option>
-        <option value="その他" selected>✨ その他</option>
-      </select>
-    </fieldset>
-
+  <legend>ジャンル（自動判定・変更可能）</legend>
+  <select id="genreSelect">
+    <option value="学び">📚 学び</option>
+    <option value="アイデア">💡 アイデア</option>
+    <option value="健康">🌿 健康</option>
+    <option value="暮らし生活">🏠 暮らし生活</option>
+    <option value="社会問題">🌐 社会問題</option>
+    <option value="防災">⛑️ 防災</option>
+    <option value="レシピ">🍳 レシピ</option>
+    <option value="オンラインサロン">💬 オンラインサロン</option>
+    <option value="お気に入り">⭐ お気に入り</option>
+    <option value="その他" selected>✨ その他</option>
+  </select>
+</fieldset>
     <!-- メモ欄 -->
     <fieldset class="fieldset">
       <legend>メモ（空欄のままでもOK）</legend>
@@ -388,24 +383,20 @@
 
   <!-- フィルタータブ -->
   <div class="tabs-wrapper">
-    <div class="tabs" id="filterTabs">
-      <div class="tab active" onclick="setFilter('all', this)">すべて</div>
-      <div class="tab" onclick="setFilter('学び', this)">📚 学び</div>
-      <div class="tab" onclick="setFilter('オンラインサロン', this)">💬 オンラインサロン</div>
-      <div class="tab" onclick="setFilter('社会問題', this)">🌐 社会問題</div>
-      <div class="tab" onclick="setFilter('健康', this)">🌿 健康</div>
-      <div class="tab" onclick="setFilter('防災', this)">⛑️ 防災</div>
-      <div class="tab" onclick="setFilter('暮らし', this)">🏠 暮らし</div>
-      <div class="tab" onclick="setFilter('アイデア', this)">💡 アイデア</div>
-      <div class="tab" onclick="setFilter('レシピ', this)">🍳 レシピ</div>
-      <div class="tab" onclick="setFilter('カスタムAI', this)">🤖 カスタムAI</div>
-      <div class="tab" onclick="setFilter('法律', this)">⚖️ 法律</div>
-      <div class="tab" onclick="setFilter('お金', this)">💰 お金</div>
-      <div class="tab" onclick="setFilter('読書映画', this)">🎬 読書映画</div>
-      <div class="tab" onclick="setFilter('法則', this)">🔍 法則</div>
-      <div class="tab" onclick="setFilter('その他', this)">✨ その他</div>
-    </div>
+  <div class="tabs" id="filterTabs">
+    <div class="tab active" onclick="setFilter('all', this)">すべて</div>
+    <div class="tab" onclick="setFilter('学び', this)">📚 学び</div>
+    <div class="tab" onclick="setFilter('アイデア', this)">💡 アイデア</div>
+    <div class="tab" onclick="setFilter('健康', this)">🌿 健康</div>
+    <div class="tab" onclick="setFilter('暮らし生活', this)">🏠 暮らし生活</div>
+    <div class="tab" onclick="setFilter('社会問題', this)">🌐 社会問題</div>
+    <div class="tab" onclick="setFilter('防災', this)">⛑️ 防災</div>
+    <div class="tab" onclick="setFilter('レシピ', this)">🍳 レシピ</div>
+    <div class="tab" onclick="setFilter('オンラインサロン', this)">💬 オンラインサロン</div>
+    <div class="tab" onclick="setFilter('お気に入り', this)">⭐ お気に入り</div>
+    <div class="tab" onclick="setFilter('その他', this)">✨ その他</div>
   </div>
+</div>
 
   <!-- リスト表示部 -->
   <div id="linkList" class="task-list"></div>
