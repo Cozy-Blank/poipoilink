@@ -2,938 +2,664 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <title>偏愛Tool｜日割りメリハリ</title>
-  
-  <link rel="apple-touch-icon" href="https://i.ibb.co/pjGSsHNm/teiku.png">
-  <link rel="icon" type="image/png" href="https://i.ibb.co/pjGSsHNm/teiku.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>poipoilink</title>
 
-  <meta property="og:title" content="偏愛Tool｜日割りメリハリ">
-  <meta property="og:description" content="買う日、ときどき買わない日">
-  <meta property="og:site_name" content="偏愛Tool">
-  <meta property="og:image" content="https://i.ibb.co/pjGSsHNm/teiku.png">
-  <meta property="og:type" content="website">
-  
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="偏愛Tool｜日割りメリハリ">
-  <meta name="twitter:description" content="買う日、ときどき買わない日">
-  <meta name="twitter:image" content="https://i.ibb.co/pjGSsHNm/teiku.png">
+  <!-- スマホのホーム画面に追加したときのアイコン設定 -->
+  <!-- お好きな画像のURLに差し替えてください -->
+  <link rel="apple-touch-icon" href="https://i.ibb.co/k2j20Y2H/image.png">
+  <link rel="icon" sizes="192x192" href="https://i.ibb.co/k2j20Y2H/image.png">
+  <!-- WEBアプリ化（フルスクリーン表示）の設定 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="poipoilink">
 
   <style>
     :root {
-      --bg-color: #f3f0f7;
+      --primary: #ec4899;
+      --primary-dark: #be185d;
+      --primary-light: #fce7f3;
+      --bg: #fdf2f8;
       --card-bg: #ffffff;
-      --primary: #522b80;
-      --primary-dark: #351759;
-      --accent-blue: #00875a;
-      --accent-blue-dark: #005c3d;
-      --accent-pink: #d81b60;
-      --accent-pink-bg: #fff0f5;
-      --accent-pink-border: #f8bbd0;
-      --text-main: #271a38;
-      --text-muted: #7b6d8c;
-      --border-color: #d5c3e5;
-      --calc-bg: #f5eeeb;
-      --radius: 20px;
+      --text-main: #831843;
+      --text-muted: #9d174d;
+      --border-color: #fbcfe8;
+      --banner-image-url: url('https://i.ibb.co/pmYQ4QH/rink.png');
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: var(--bg-color);
+      background-color: var(--bg);
       color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 12px;
+      line-height: 1.5;
       padding-bottom: 40px;
     }
 
-    .app-container {
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px 12px 0 12px;
     }
 
-    .header-banner-wrapper {
+    /* 最上部イラストバナー */
+    .top-banner-card {
       width: 100%;
-      margin-bottom: 2px;
-    }
-
-    .header-banner {
-      width: 100%;
-      aspect-ratio: 3.4 / 1;
+      aspect-ratio: 3.2 / 1;
+      max-height: 180px;
+      min-height: 110px;
       background-color: #ffffff;
+      background-image: var(--banner-image-url);
+      background-size: cover;
+      background-position: center;
+      border-radius: 16px;
       border: 2px solid var(--border-color);
-      border-radius: 18px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.08);
+      margin-bottom: 14px;
+      overflow: hidden;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* 入力フォームカード */
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.06);
+      margin-bottom: 14px;
+      border: 2px solid var(--border-color);
+    }
+
+    .fieldset {
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      background: #fff5f8;
+    }
+
+    .fieldset legend {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      padding: 0 6px;
+    }
+
+    input[type="text"], textarea, select {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-size: 0.9rem;
+      outline: none;
+      color: var(--text-main);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    select {
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-fetch {
+      width: 100%;
+      padding: 10px;
+      background: #fff;
+      color: var(--primary-dark);
+      border: 1.5px solid var(--primary);
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      box-sizing: border-box;
-    }
-
-    .header-banner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      pointer-events: none;
-      box-sizing: border-box;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-      border: 2px solid var(--border-color);
-    }
-
-    /* カレンダー（スタンプ帳）スタイル */
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
       gap: 6px;
-      margin-top: 8px;
+      transition: all 0.2s;
     }
 
-    .day-cell {
-      background: var(--calc-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      min-height: 52px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 4px 2px;
-      cursor: pointer;
-      position: relative;
-      user-select: none;
-      transition: all 0.15s ease;
+    .btn-fetch:active {
+      background: var(--primary-light);
     }
 
-    .day-cell.active {
+    /* プレビュー領域 */
+    .preview-card {
       background: #ffffff;
-      border-color: var(--primary);
-      box-shadow: 0 2px 5px rgba(82, 43, 128, 0.15);
-    }
-
-    .day-cell.is-today {
-      border: 2px solid var(--accent-pink);
-    }
-
-    .day-number {
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: var(--text-muted);
-    }
-
-    .day-cell.active .day-number {
-      color: var(--primary);
-    }
-
-    .stamp-icon {
-      font-size: 1.1rem;
-      line-height: 1;
-      min-height: 1.2rem;
-      display: block;
-    }
-
-    .day-amount {
-      font-size: 0.55rem;
-      font-weight: 800;
-      color: var(--primary-dark);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 100%;
-    }
-
-    .card-compact {
-      background: #faf7fc;
-      border: 2px solid var(--border-color);
+      border: 1.5px solid var(--border-color);
       border-radius: 14px;
-      padding: 12px 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .preview-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-    }
-
-    .card-boost-frame {
-      background: var(--accent-pink-bg);
-      border: 2px solid var(--accent-pink-border);
-      border-radius: 14px;
-      padding: 12px 16px;
-      display: flex;
       align-items: center;
-      justify-content: space-between;
-    }
-
-    .card-piggy {
-      background: #ffffff;
-      border: 2px solid var(--border-color);
-      border-radius: 14px;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .card-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .big-number {
-      font-size: 1.7rem;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .unit {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-left: 2px;
-    }
-
-    .sub-stat-row {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      margin-top: 10px;
-      padding-top: 6px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      border-top: 1px dashed var(--border-color);
-    }
-
-    .sub-stat-val {
-      font-weight: 800;
-      color: var(--text-main);
-      margin-left: 2px;
-    }
-
-    .calc-area {
-      margin-top: 10px;
-      background: var(--calc-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 12px;
-    }
-
-    .calc-display {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 8px 12px;
-      text-align: right;
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--primary-dark);
       margin-bottom: 8px;
     }
 
-    .calc-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-    }
-
-    .calc-btn {
-      padding: 10px 0;
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: 800;
-      cursor: pointer;
-      color: var(--text-main);
-    }
-
-    .calc-btn:active { transform: scale(0.95); }
-    .calc-btn.op { background: #ffffff; color: var(--primary); }
-    .calc-btn.add { background: var(--primary); color: white; border: none; grid-column: span 2; }
-    .calc-btn.clear { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
-    
-    .calc-btn.boost {
-      background: var(--accent-pink);
-      color: white;
-      border: none;
+    .preview-author {
       font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--text-muted);
     }
 
-    .settle-action-row {
+    .preview-body {
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .btn-action {
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-copy {
+      background: #f1f5f9;
+      color: #334155;
+    }
+
+    .btn-save {
+      background: var(--primary-dark);
+      color: #fff;
+    }
+
+    /* フィルタータブ */
+    .tabs-wrapper {
+      overflow-x: auto;
+      margin-bottom: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tabs-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      width: max-content;
+      padding-bottom: 4px;
+    }
+
+    .tab {
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      white-space: nowrap;
+    }
+
+    .tab.active {
+      color: #fff;
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* 保存リスト */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .task-item {
+      background-color: var(--card-bg);
+      border-radius: 18px;
+      padding: 14px 16px;
+      border: 2px solid var(--border-color);
+      box-shadow: 0 4px 10px rgba(236, 72, 153, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .task-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 800;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .task-title {
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .task-memo {
+      font-size: 0.8rem;
+      color: #475569;
+      background: #fdf2f8;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .link-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: var(--primary-light);
+      padding: 6px 12px;
+      border-radius: 8px;
+      word-break: break-all;
+      width: fit-content;
+      margin-top: 2px;
+    }
+
+    .item-actions {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-top: 6px;
       padding-top: 6px;
+      border-top: 1px dashed var(--border-color);
     }
 
-    .btn-settle-blue {
-      background: var(--accent-blue);
-      color: white;
+    .delete-btn {
+      background: none;
       border: none;
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 800;
+      color: #f43f5e;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      transition: transform 0.1s, background 0.2s;
-    }
-
-    .btn-settle-blue:active {
-      transform: scale(0.95);
-      background: var(--accent-blue-dark);
-    }
-
-    .form-select, .form-input {
-      padding: 6px 8px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      font-size: 0.85rem;
-      background: white;
-      color: var(--text-main);
-      outline: none;
-    }
-
-    .form-input-number {
-      text-align: right;
-      width: 110px;
-    }
-
-    .task-input-container {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 10px;
-    }
-
-    .task-input-container input {
-      flex: 1;
-      padding: 8px 10px;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      font-size: 0.85rem;
-      outline: none;
-      background: #ffffff;
-    }
-
-    .task-input-container select {
-      padding: 6px 8px;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      font-size: 0.8rem;
-      background: white;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    .btn-small {
-      padding: 8px 12px;
-      border-radius: 10px;
       font-size: 0.85rem;
       font-weight: 800;
-      border: none;
-      background: var(--primary);
-      color: white;
-      cursor: pointer;
     }
 
-    .task-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .task-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 10px;
-      background: var(--calc-bg);
-      border-radius: 10px;
-      font-size: 0.85rem;
-    }
-
-    .task-item.completed span {
-      opacity: 0.4;
-      text-decoration: line-through;
-    }
-
-    .task-left {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex: 1;
-    }
-
-    .task-badge {
-      font-size: 0.7rem;
-      padding: 2px 6px;
-      border-radius: 6px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .badge-buy { background: #f0eaf7; color: var(--primary); }
-    .badge-todo { background: #fce4ec; color: var(--accent-pink); }
-
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.4);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-      padding: 20px;
-    }
-
-    .modal-content {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 20px;
-      width: 100%;
-      max-width: 340px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      border: 2px solid var(--accent-pink-border);
+    .empty-state {
       text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: #ffffff;
+      border-radius: 20px;
+      border: 2px dashed var(--border-color);
     }
   </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <div class="header-banner-wrapper">
-      <div class="header-banner">
-        <img src="https://i.ibb.co/pjGSsHNm/teiku.png" alt="ヘッダー画像" class="header-img">
+<div class="container">
+  <!-- 最上部イラストエリア -->
+  <div class="top-banner-card"></div>
+
+  <!-- 入力フォーム -->
+  <div class="card">
+    <fieldset class="fieldset">
+      <legend>リンク先URLを貼り付け</legend>
+      <input type="text" id="urlInput" placeholder="リンク先URLを貼り付け" oninput="autoDetectGenre()">
+    </fieldset>
+
+    <button class="btn-fetch" onclick="fetchPostText()">
+      📥 本文を取得する
+    </button>
+
+    <!-- 取得テキスト プレビュー画面 -->
+    <div class="preview-card" id="previewArea" style="display: none;">
+      <div class="preview-header">
+        <div class="preview-author" id="previewAuthor">ユーザー名</div>
+      </div>
+      <div class="preview-body" id="previewBody">ここに本文が入ります</div>
+      <div class="action-row">
+        <button class="btn-action btn-copy" onclick="copyText()">📋 コピー</button>
+        <button class="btn-action btn-save" onclick="addLink()">💾 アプリに保存</button>
       </div>
     </div>
 
-    <!-- カレンダー（使う日スタンプ帳） -->
-    <div class="card">
-      <div class="card-title">
-        <span>👛 使う日スタンプ帳</span>
-        <span style="font-size: 0.7rem; font-weight: 500;">タップで👛切り替え</span>
-      </div>
-      <div class="calendar-grid" id="calendarGrid"></div>
-    </div>
+    <!-- ジャンル選択 -->
+    <fieldset class="fieldset">
+      <legend>ジャンル（自動判定・変更可能）</legend>
+      <select id="genreSelect">
+        <option value="学び">📚 学び</option>
+        <option value="オンラインサロン">💬 オンラインサロン</option>
+        <option value="社会問題">🌐 社会問題</option>
+        <option value="健康">🌿 健康</option>
+        <option value="防災">⛑️ 防災</option>
+        <option value="暮らし">🏠 暮らし</option>
+        <option value="アイデア">💡 アイデア</option>
+        <option value="レシピ">🍳 レシピ</option>
+        <option value="カスタムAI">🤖 カスタムAI</option>
+        <option value="法律">⚖️ 法律</option>
+        <option value="お金">💰 お金</option>
+        <option value="読書映画">🎬 読書映画</option>
+        <option value="法則">🔍 法則</option>
+        <option value="その他" selected>✨ その他</option>
+      </select>
+    </fieldset>
 
-    <!-- 電卓＆予算カード -->
-    <div class="card">
-      <div id="periodRangeText" style="text-align: center; color: var(--primary-dark); font-weight: 700; font-size: 0.8rem; margin-bottom: 4px;">
-        対象期間: ----/--/-- 〜 ----/--/--
-      </div>
-      
-      <div style="text-align: center; margin: 4px 0 8px 0;">
-        <span id="todayBudget" class="big-number">0</span>
-        <span class="unit">円</span>
-      </div>
+    <!-- メモ欄 -->
+    <fieldset class="fieldset">
+      <legend>メモ（空欄のままでもOK）</legend>
+      <textarea id="memoInput" placeholder="メモを入力..."></textarea>
+    </fieldset>
 
-      <div class="calc-area">
-        <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">本日の買い物・利用額を入力</div>
-        <div id="calcDisplay" class="calc-display">0</div>
-        
-        <div class="calc-grid">
-          <button class="calc-btn clear" onclick="calcInput('C')">C</button>
-          <button class="calc-btn op" onclick="calcInput('/')">÷</button>
-          <button class="calc-btn op" onclick="calcInput('*')">×</button>
-          <button class="calc-btn op" onclick="calcInput('-')">-</button>
-          
-          <button class="calc-btn" onclick="calcInput('7')">7</button>
-          <button class="calc-btn" onclick="calcInput('8')">8</button>
-          <button class="calc-btn" onclick="calcInput('9')">9</button>
-          <button class="calc-btn op" onclick="calcInput('+')">+</button>
-          
-          <button class="calc-btn" onclick="calcInput('4')">4</button>
-          <button class="calc-btn" onclick="calcInput('5')">5</button>
-          <button class="calc-btn" onclick="calcInput('6')">6</button>
-          <button class="calc-btn add" onclick="addExpense()">＋ 加算</button>
-          
-          <button class="calc-btn" onclick="calcInput('1')">1</button>
-          <button class="calc-btn" onclick="calcInput('2')">2</button>
-          <button class="calc-btn" onclick="calcInput('3')">3</button>
-          <button class="calc-btn" onclick="calcInput('0')">0</button>
-
-          <button class="calc-btn boost" onclick="openBoostModal()" style="grid-column: span 2;">💖 ブースト</button>
-        </div>
-
-        <div class="sub-stat-row">
-          <div>残りの生活費: <span id="remainingBudget" class="sub-stat-val">0</span> 円</div>
-        </div>
-
-        <div class="settle-action-row">
-          <div style="font-size: 0.85rem; font-weight: 800; color: var(--primary-dark);">
-            本日累計: <span id="todaySpentSum">0</span> 円
-          </div>
-          <div id="settleActionBox">
-            <button class="btn-settle-blue" onclick="confirmDailySettle()">精算する</button>
-          </div>
-        </div>
-
-        <div id="settledBadge" style="display: none; flex-direction: column; gap: 8px; margin-top: 8px; padding: 10px; background: var(--border-color); border-radius: 10px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-            <span style="font-size: 0.85rem; font-weight: 800; color: var(--primary-dark);">本日精算完了！</span>
-            <button onclick="unsettle()" style="font-size: 0.75rem; background: none; border: none; color: #b91c1c; font-weight: 700; cursor: pointer; text-decoration: underline;">精算を取り消す</button>
-          </div>
-          <div style="border-top: 1px dashed var(--text-muted); padding-top: 6px; text-align: right;">
-            <button onclick="allReset()" style="font-size: 0.75rem; background: none; border: none; color: #7f1d1d; font-weight: 800; cursor: pointer; text-decoration: underline;">⚠️ これまでの記録を初期化（オールリセット）</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 買い物予定・ToDoリスト -->
-    <div class="card">
-      <div class="card-title">🛒 買い物予定・ToDoリスト</div>
-      <div class="task-input-container">
-        <select id="taskCategory">
-          <option value="買い物">🛒 買い物</option>
-          <option value="ToDo">📝 ToDo</option>
-        </select>
-        <input type="text" id="taskText" placeholder="買いたいもの・やること...">
-        <button class="btn-small" onclick="addTask()">追加</button>
-      </div>
-      <ul class="task-list" id="taskList"></ul>
-    </div>
-
-    <!-- 期間・予算の設定 -->
-    <div class="card">
-      <div class="card-title">期間・予算の設定</div>
-      
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <span style="font-size: 0.85rem; font-weight: 700;">集計の範囲</span>
-        <select id="periodType" class="form-select" onchange="updateSettings()">
-          <option value="monthly">1日〜月末締め</option>
-          <option value="customNext">締日指定（例:25日〜）</option>
-          <option value="customRange">日付を自由に指定</option>
-        </select>
-      </div>
-
-      <div id="customRangeRow" style="display: none; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-        <input type="date" id="startDate" class="form-input" onchange="updateSettings()" style="width: 45%;">
-        〜
-        <input type="date" id="endDate" class="form-input" onchange="updateSettings()" style="width: 45%;">
-      </div>
-
-      <div id="startDayRow" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <span style="font-size: 0.85rem; font-weight: 700;">開始日（毎月）</span>
-        <input type="number" id="startDay" class="form-input form-input-number" oninput="updateSettings()" style="width: 80px;">
-      </div>
-
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <span style="font-size: 0.85rem; font-weight: 700;">手元管理費</span>
-        <input type="number" id="inputTotal" class="form-input form-input-number" oninput="updateSettings()">
-      </div>
-
-      <div style="margin-bottom: 10px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-          <span style="font-size: 0.85rem; font-weight: 700;">大型出費 (事前除外)</span>
-          <input type="number" id="inputBigExpense" class="form-input form-input-number" oninput="updateSettings()">
-        </div>
-        <div style="display: flex; justify-content: flex-end;">
-          <input type="text" id="inputBigExpenseMemo" class="form-input" placeholder="用途メモ（例: チケット代）" oninput="updateSettings()" style="width: 100%; font-size: 0.8rem;">
-        </div>
-      </div>
-    </div>
-
-    <!-- 余剰金仕分け -->
-    <div class="card-compact">
-      <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-dark);">全体精算後の残り (余剰金)</div>
-      <div>
-        <span id="finalSurplus" style="font-size: 1.25rem; font-weight: 800; color: var(--primary-dark);">0</span>
-        <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-dark); margin-left: 2px;">円</span>
-      </div>
-    </div>
-
-    <div class="card-boost-frame">
-      <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-pink);">💖 来月のご偏愛ブーストにまわす</div>
-      <div style="display: flex; align-items: center; gap: 4px;">
-        <input type="number" id="inputRewardFrame" class="form-input form-input-number" oninput="updateRewardAndPiggy()" style="width: 90px; color: var(--accent-pink); font-weight: 800; border-color: var(--accent-pink-border); background: #ffffff;">
-        <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-pink);">円</span>
-      </div>
-    </div>
-
-    <div class="card-piggy">
-      <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-main);">🐷 残りは貯金箱へ</div>
-      <div>
-        <span id="piggyBankAmount" style="font-size: 1.25rem; font-weight: 800; color: var(--primary);">0</span>
-        <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-left: 2px;">円</span>
-      </div>
-    </div>
-
+    <button class="btn-action btn-save" style="width:100%; justify-content:center; padding:12px; font-size:0.95rem;" onclick="addLink()">
+      💾 直接リストに保存する
+    </button>
   </div>
 
-  <div id="boostModal" class="modal-overlay">
-    <div class="modal-content">
-      <h3 style="font-size: 1.05rem; color: var(--accent-pink); margin-bottom: 8px;">💖 ご偏愛ブースト発動</h3>
-      <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">先月から繰り越されたブースト枠から本日の予算へチャージします。</div>
-      
-      <div style="background: var(--calc-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; margin-bottom: 12px;">
-        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">現在のブースト残高</div>
-        <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-pink);"><span id="modalBoostBalance">0</span> 円</div>
-      </div>
-
-      <div style="margin-bottom: 16px;">
-        <label style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 4px;">今日使うブースト金額</label>
-        <input type="number" id="useBoostInput" class="form-input" style="width: 100%; text-align: center; font-size: 1.1rem; font-weight: 800;" placeholder="0">
-      </div>
-
-      <div style="display: flex; gap: 8px;">
-        <button onclick="closeBoostModal()" style="flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); background: white; font-weight: 700; font-size: 0.85rem; cursor: pointer;">キャンセル</button>
-        <button onclick="applyBoost()" style="flex: 1.5; padding: 10px; border-radius: 10px; border: none; background: var(--accent-pink); color: white; font-weight: 800; font-size: 0.85rem; cursor: pointer;">本日の予算に追加</button>
-      </div>
+  <!-- フィルタータブ -->
+  <div class="tabs-wrapper">
+    <div class="tabs" id="filterTabs">
+      <div class="tab active" onclick="setFilter('all', this)">すべて</div>
+      <div class="tab" onclick="setFilter('学び', this)">📚 学び</div>
+      <div class="tab" onclick="setFilter('オンラインサロン', this)">💬 オンラインサロン</div>
+      <div class="tab" onclick="setFilter('社会問題', this)">🌐 社会問題</div>
+      <div class="tab" onclick="setFilter('健康', this)">🌿 健康</div>
+      <div class="tab" onclick="setFilter('防災', this)">⛑️ 防災</div>
+      <div class="tab" onclick="setFilter('暮らし', this)">🏠 暮らし</div>
+      <div class="tab" onclick="setFilter('アイデア', this)">💡 アイデア</div>
+      <div class="tab" onclick="setFilter('レシピ', this)">🍳 レシピ</div>
+      <div class="tab" onclick="setFilter('カスタムAI', this)">🤖 カスタムAI</div>
+      <div class="tab" onclick="setFilter('法律', this)">⚖️ 法律</div>
+      <div class="tab" onclick="setFilter('お金', this)">💰 お金</div>
+      <div class="tab" onclick="setFilter('読書映画', this)">🎬 読書映画</div>
+      <div class="tab" onclick="setFilter('法則', this)">🔍 法則</div>
+      <div class="tab" onclick="setFilter('その他', this)">✨ その他</div>
     </div>
   </div>
 
-  <script>
-    const DEFAULT_HEADER = 'https://i.ibb.co/pjGSsHNm/teiku.png';
+  <!-- リスト表示部 -->
+  <div id="linkList" class="task-list"></div>
+</div>
 
-    const defaultState = {
-      headerImg: DEFAULT_HEADER,
-      periodType: 'monthly',
-      startDay: 25,
-      startDate: '',
-      endDate: '',
-      totalBudget: 80000,
-      bigExpense: 10000,
-      bigExpenseMemo: '',
-      todaySpentTotal: 0,
-      isSettledToday: false,
-      rewardFrame: 0,
-      boostBonus: 0,
-      tasks: [],
-      stampedDates: {},
-      dailySettlements: {}
+<script>
+  let currentFilter = 'all';
+  let fetchedAuthor = '';
+  let fetchedBodyText = '';
+  let links = JSON.parse(localStorage.getItem('poipoilinks') || '[]');
+
+  const keywordMap = {
+    'オンラインサロン': ['サロン', 'コミュニティ', 'メンバー', 'オフ会', '限定配信', 'discord', 'slack'],
+    '社会問題': ['社会問題', '事件', '事故', 'ニュース', '政治', '環境', '貧困', '少子化', '少子高齢化', '差別', '人権', '福祉', '税金問題', '不祥事', '批判', '議論', 'SDGs'],
+    '学び': ['学び', '自己啓発', 'マインド', '思考', '勉強', '学習', '習慣', '成長', '成功', 'モチベーション', '読書', '知識', 'スキル', '心理学', '哲学'],
+    '健康': ['健康', '睡眠', '食事', '栄養', '運動', '筋トレ', 'ダイエット', 'メンタル', 'ヘルス', '予防', '医療', 'ストレッチ', 'ヨガ'],
+    '防災': ['防災', '地震', '災害', '避難', '備蓄', 'ハザード', '台風', '救急', '安全', '緊急'],
+    '暮らし': ['暮らし', '生活', '掃除', '収納', 'インテリア', '家事', '便利グッズ', '断捨離', 'ライフハック', '部屋'],
+    'アイデア': ['アイデア', 'ひらめき', '企画', '発想', 'デザイン', 'クリエイティブ', 'ブレスト', '改善', '仕組み'],
+    'レシピ': ['レシピ', '料理', '献立', 'ごはん', 'スイーツ', '時短料理', '作り置き', 'おやつ', 'クッキング', '美味しい'],
+    'カスタムAI': ['ai', 'カスタムai', 'chatgpt', 'prompt', 'プロンプト', 'claude', 'gemini', '生成ai', 'gpt', '自動化', 'llm'],
+    '法律': ['法律', '契約', '規約', '著作権', '権利', '弁護士', '法務', '労働法', 'コンプライアンス', 'ルール'],
+    'お金': ['お金', '投資', '節約', '貯金', '資産運用', '税金', '株', 'nisa', '副業', '会計', 'マネー', '家計', 'btc', 'bitcoin', '暗号資産', '仮想通貨'],
+    '読書映画': ['読書', '映画', '本', 'シネマ', '小説', 'レビュー', '感想', 'おすすめ本', '映画鑑賞', 'アニメ', 'ドラマ'],
+    '法則': ['法則', '密議', '象徴', '智慧', 'フリーメーソン', '神殿', 'pi', '重力', 'ポリフォニック', '倍音', 'フィボナッチ', '黄金比', 'オクターブ', '宇宙', '波動', '原理', '真理']
+  };
+
+  function normalizeXUrl(inputUrl) {
+    let url = inputUrl.trim();
+    url = url.replace('https://x.com/', 'https://twitter.com/').replace('http://x.com/', 'https://twitter.com/');
+    url = url.split('?')[0];
+    return url;
+  }
+
+  async function fetchPostText() {
+    const rawUrl = document.getElementById('urlInput').value.trim();
+    if (!rawUrl) {
+      alert('URLを入力してください');
+      return;
+    }
+
+    const previewArea = document.getElementById('previewArea');
+    const previewAuthor = document.getElementById('previewAuthor');
+    const previewBody = document.getElementById('previewBody');
+
+    previewArea.style.display = 'block';
+    previewAuthor.textContent = '取得中...';
+    previewBody.textContent = 'ポスト本文を取得しています...';
+
+    const targetUrl = normalizeXUrl(rawUrl);
+
+    // 1. FxTwitter / FixupX API
+    try {
+      const match = targetUrl.match(/status\/(\d+)/);
+      if (match && match[1]) {
+        const statusId = match[1];
+        const res = await fetch(`https://api.fxtwitter.com/status/${statusId}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.tweet) {
+            fetchedAuthor = data.tweet.author ? `${data.tweet.author.name} (@${data.tweet.author.screen_name})` : 'X User';
+            fetchedBodyText = data.tweet.text || '';
+            showSuccess(fetchedAuthor, fetchedBodyText);
+            return;
+          }
+        }
+      }
+    } catch (e) {}
+
+    // 2. oEmbed API + corsproxy
+    try {
+      const oembedUrl = `https://publish.twitter.com/oembed?url=${encodeURIComponent(targetUrl)}&omit_script=true`;
+      const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(oembedUrl)}`);
+      if (res.ok) {
+        const json = await res.json();
+        fetchedAuthor = json.author_name || 'X User';
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = json.html;
+        let text = tempDiv.innerText || tempDiv.textContent || '';
+        text = text.replace(/—\s*.*$/, '').trim();
+
+        fetchedBodyText = text;
+        showSuccess(fetchedAuthor, fetchedBodyText);
+        return;
+      }
+    } catch (e) {}
+
+    // 3. AllOrigins Proxy
+    try {
+      const oembedUrl = `https://publish.twitter.com/oembed?url=${encodeURIComponent(targetUrl)}&omit_script=true`;
+      const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(oembedUrl)}`);
+      const data = await res.json();
+      if (data.contents) {
+        const json = JSON.parse(data.contents);
+        fetchedAuthor = json.author_name || 'X User';
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = json.html;
+        let text = tempDiv.innerText || tempDiv.textContent || '';
+        text = text.replace(/—\s*.*$/, '').trim();
+
+        fetchedBodyText = text;
+        showSuccess(fetchedAuthor, fetchedBodyText);
+        return;
+      }
+    } catch (e) {}
+
+    previewAuthor.textContent = 'お知らせ';
+    previewBody.textContent = '本文の自動取得に失敗しました。直接メモ欄に内容を入力して保存してください。';
+  }
+
+  function showSuccess(author, body) {
+    document.getElementById('previewAuthor').textContent = author;
+    document.getElementById('previewBody').textContent = body;
+    autoDetectGenre(body);
+  }
+
+  function autoDetectGenre(extraText = '') {
+    const text = (document.getElementById('urlInput').value + ' ' + extraText).toLowerCase();
+    let foundGenre = 'その他';
+
+    for (const [genre, keywords] of Object.entries(keywordMap)) {
+      if (keywords.some(kw => text.includes(kw.toLowerCase()))) {
+        foundGenre = genre;
+        break;
+      }
+    }
+
+    document.getElementById('genreSelect').value = foundGenre;
+  }
+
+  function copyText() {
+    if (!fetchedBodyText) return;
+    navigator.clipboard.writeText(fetchedBodyText).then(() => {
+      alert('本文をコピーしました！');
+    });
+  }
+
+  function setFilter(filter, element) {
+    currentFilter = filter;
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    element.classList.add('active');
+    renderLinks();
+  }
+
+  function addLink() {
+    const urlInput = document.getElementById('urlInput');
+    const memoInput = document.getElementById('memoInput');
+    const genreSelect = document.getElementById('genreSelect');
+
+    const url = urlInput.value.trim();
+    const memo = memoInput.value.trim();
+    const genre = genreSelect.value || 'その他';
+    const bodyText = fetchedBodyText;
+
+    if (!url && !memo && !bodyText) {
+      alert('URL、本文、またはメモを入力してください');
+      return;
+    }
+
+    const newLink = {
+      id: Date.now(),
+      url: url,
+      author: fetchedAuthor,
+      bodyText: bodyText,
+      memo: memo,
+      genre: genre,
+      createdAt: new Date().toLocaleDateString('ja-JP')
     };
 
-    let state = JSON.parse(localStorage.getItem('nmd_app_state_v6') || 'null') || {...defaultState};
-    if (!state.stampedDates) state.stampedDates = {};
-    if (!state.dailySettlements) state.dailySettlements = {};
+    links.unshift(newLink);
+    saveAndRender();
 
-    let calcExpr = '0';
+    urlInput.value = '';
+    memoInput.value = '';
+    fetchedBodyText = '';
+    fetchedAuthor = '';
+    document.getElementById('previewArea').style.display = 'none';
+    document.getElementById('genreSelect').value = 'その他';
+  }
 
-    function saveState() {
-      localStorage.setItem('nmd_app_state_v6', JSON.stringify(state));
-      render();
-    }
+  function deleteLink(id) {
+    links = links.filter(l => l.id !== id);
+    saveAndRender();
+  }
 
-    function getPeriodRangeDates() {
-      const today = new Date();
-      let start, end;
+  function copyItemText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('本文をコピーしました！');
+    });
+  }
 
-      if (state.periodType === 'monthly') {
-        start = new Date(today.getFullYear(), today.getMonth(), 1);
-        end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-      } else if (state.periodType === 'customRange' && state.startDate && state.endDate) {
-        start = new Date(state.startDate);
-        end = new Date(state.endDate);
-      } else {
-        const sDay = Math.min(Math.max(state.startDay || 25, 1), 28);
-        if (today.getDate() >= sDay) {
-          start = new Date(today.getFullYear(), today.getMonth(), sDay);
-          end = new Date(today.getFullYear(), today.getMonth() + 1, sDay - 1);
-        } else {
-          start = new Date(today.getFullYear(), today.getMonth() - 1, sDay);
-          end = new Date(today.getFullYear(), today.getMonth(), sDay - 1);
-        }
-      }
-      return { start, end };
-    }
+  function saveAndRender() {
+    localStorage.setItem('poipoilinks', JSON.stringify(links));
+    renderLinks();
+  }
 
-    function formatDateKey(d) {
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const date = String(d.getDate()).padStart(2, '0');
-      return `${y}-${m}-${date}`;
-    }
-
-    function formatDateDisplay(d) {
-      return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
-    }
-
-    function toggleStamp(dateKey) {
-      if (state.stampedDates[dateKey]) {
-        delete state.stampedDates[dateKey];
-      } else {
-        state.stampedDates[dateKey] = true;
-      }
-      saveState();
-    }
-
-    function renderCalendar() {
-      const grid = document.getElementById('calendarGrid');
-      if (!grid) return;
-      grid.innerHTML = '';
-
-      const { start, end } = getPeriodRangeDates();
-      const todayStr = formatDateKey(new Date());
-
-      let current = new Date(start);
-
-      while (current <= end) {
-        const dateKey = formatDateKey(current);
-        const cell = document.createElement('div');
-        
-        const settledVal = state.dailySettlements[dateKey];
-        const isStamped = !!state.stampedDates[dateKey] || (settledVal !== undefined && settledVal !== null);
-        const isToday = (dateKey === todayStr);
-
-        cell.className = `day-cell ${isStamped ? 'active' : ''} ${isToday ? 'is-today' : ''}`;
-        
-        const dayNum = current.getDate();
-        const amtText = (settledVal !== undefined && settledVal !== null) ? `${settledVal.toLocaleString()}円` : '';
-
-        cell.innerHTML = `
-          <span class="day-number">${dayNum}</span>
-          <span class="stamp-icon">${isStamped ? '👛' : ''}</span>
-          <span class="day-amount">${amtText}</span>
-        `;
-
-        cell.onclick = () => toggleStamp(dateKey);
-        grid.appendChild(cell);
-
-        current.setDate(current.getDate() + 1);
-      }
-    }
-
-    function render() {
-      if (document.getElementById('periodType')) document.getElementById('periodType').value = state.periodType;
-      if (document.getElementById('startDay')) document.getElementById('startDay').value = state.startDay;
-      if (document.getElementById('startDate')) document.getElementById('startDate').value = state.startDate || '';
-      if (document.getElementById('endDate')) document.getElementById('endDate').value = state.endDate || '';
-      if (document.getElementById('inputTotal')) document.getElementById('inputTotal').value = state.totalBudget;
-      if (document.getElementById('inputBigExpense')) document.getElementById('inputBigExpense').value = state.bigExpense;
-      if (document.getElementById('inputBigExpenseMemo')) document.getElementById('inputBigExpenseMemo').value = state.bigExpenseMemo || '';
-
-      if (document.getElementById('startDayRow')) {
-        document.getElementById('startDayRow').style.display = state.periodType === 'customNext' ? 'flex' : 'none';
-      }
-      if (document.getElementById('customRangeRow')) {
-        document.getElementById('customRangeRow').style.display = state.periodType === 'customRange' ? 'flex' : 'none';
-      }
-
-      const { start, end } = getPeriodRangeDates();
-      const periodRangeEl = document.getElementById('periodRangeText');
-      if (periodRangeEl) {
-        periodRangeEl.innerText = `対象期間: ${formatDateDisplay(start)} 〜 ${formatDateDisplay(end)}`;
-      }
-
-      let pastSettledTotal = 0;
-      Object.values(state.dailySettlements).forEach(amt => {
-        pastSettledTotal += Number(amt) || 0;
-      });
-
-      const baseBudget = (state.totalBudget || 0) - (state.bigExpense || 0);
-      const remainingBudget = Math.max(0, baseBudget - pastSettledTotal - state.todaySpentTotal);
-
-      renderCalendar();
-
-      if (document.getElementById('remainingBudget')) document.getElementById('remainingBudget').innerText = remainingBudget.toLocaleString();
-      if (document.getElementById('todaySpentSum')) document.getElementById('todaySpentSum').innerText = state.todaySpentTotal.toLocaleString();
-
-      const totalTodayBudget = Math.max(0, remainingBudget + (state.boostBonus || 0));
-      if (document.getElementById('todayBudget')) document.getElementById('todayBudget').innerText = totalTodayBudget.toLocaleString();
-
-      const settleActionBox = document.getElementById('settleActionBox');
-      const settledBadge = document.getElementById('settledBadge');
-
-      if (state.isSettledToday) {
-        if (settleActionBox) settleActionBox.style.display = 'none';
-        if (settledBadge) settledBadge.style.display = 'flex';
-      } else {
-        if (settleActionBox) settleActionBox.style.display = 'block';
-        if (settledBadge) settledBadge.style.display = 'none';
-      }
-
-      const finalSurplus = remainingBudget;
-      if (document.getElementById('finalSurplus')) document.getElementById('finalSurplus').innerText = finalSurplus.toLocaleString();
-      if (document.getElementById('inputRewardFrame')) document.getElementById('inputRewardFrame').value = state.rewardFrame;
-
-      const piggyBank = Math.max(0, finalSurplus - (state.rewardFrame || 0));
-      if (document.getElementById('piggyBankAmount')) document.getElementById('piggyBankAmount').innerText = piggyBank.toLocaleString();
-
-      const taskListEl = document.getElementById('taskList');
-      if (taskListEl) {
-        taskListEl.innerHTML = '';
-        if (state.tasks.length === 0) {
-          taskListEl.innerHTML = '<li style="text-align:center; color: var(--text-muted); font-size:0.8rem; padding: 6px 0;">リストは空です</li>';
-        } else {
-          state.tasks.forEach(task => {
-            const li = document.createElement('li');
-            li.className = `task-item ${task.completed ? 'completed' : ''}`;
-            const badgeClass = task.category === '買い物' ? 'badge-buy' : 'badge-todo';
-            li.innerHTML = `
-              <div class="task-left">
-                <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${task.id})">
-                <span class="task-badge ${badgeClass}">${task.category}</span>
-                <span style="font-weight:700;">${escapeHtml(task.text)}</span>
-              </div>
-              <button style="color:#b91c1c; border:none; background:none; cursor:pointer; font-weight:700; font-size:0.8rem;" onclick="deleteTask(${task.id})">削除</button>
-            `;
-            taskListEl.appendChild(li);
-          });
-        }
-      }
-    }
-
-    function updateSettings() {
-      state.periodType = document.getElementById('periodType').value;
-      state.startDay = Number(document.getElementById('startDay')?.value) || 25;
-      state.startDate = document.getElementById('startDate')?.value || '';
-      state.endDate = document.getElementById('endDate')?.value || '';
-      state.totalBudget = Number(document.getElementById('inputTotal')?.value) || 0;
-      state.bigExpense = Number(document.getElementById('inputBigExpense')?.value) || 0;
-      state.bigExpenseMemo = document.getElementById('inputBigExpenseMemo')?.value || '';
-
-      saveState();
-    }
-
-    function updateRewardAndPiggy() {
-      const val = Number(document.getElementById('inputRewardFrame')?.value) || 0;
-      state.rewardFrame = val;
-      saveState();
-    }
-
-    function openBoostModal() {
-      document.getElementById('modalBoostBalance').innerText = (state.rewardFrame || 0).toLocaleString();
-      document.getElementById('useBoostInput').value = '';
-      document.getElementById('boostModal').style.display = 'flex';
-    }
-
-    function closeBoostModal() {
-      document.getElementById('boostModal').style.display = 'none';
-    }
-
-    function applyBoost() {
-      const amount = Number(document.getElementById('useBoostInput').value) || 0;
-      if (amount <= 0) {
-        alert('使用する金額を入力してください');
-        return;
-      }
-      if (amount > (state.rewardFrame || 0)) {
-        alert('ブースト残高を超えています');
-        return;
-      }
-
-      state.rewardFrame -= amount;
-      state.boostBonus = (state.boostBonus || 0) + amount;
-      closeBoostModal();
-      saveState();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      render();
+  function renderLinks() {
+    const listEl = document.getElementById('linkList');
+    const filteredLinks = links.filter(link => {
+      if (currentFilter === 'all') return true;
+      const linkGenre = link.genre || 'その他';
+      return linkGenre === currentFilter;
     });
 
-    function calcInput(val) {
-      if (val === 'C') { calcExpr = '0'; } 
-      else {
-        if (calcExpr === '0' && !isNaN(val)) calcExpr = val;
-        else calcExpr += val;
-      }
-      updateCalcDisplay();
+    if (filteredLinks.length === 0) {
+      listEl.innerHTML = `
+        <div class="empty-state">
+          <div>🌸 保存されたストックはありません</div>
+          <div style="font-size: 0.75rem; margin-top: 4px; font-weight: normal;">URLを入力して「本文を取得」を押すと保存できます！</div>
+        </div>
+      `;
+      return;
     }
 
-    function updateCalcDisplay() {
-      if (document.getElementById('calcDisplay')) {
-        document.getElementById('calcDisplay').innerText = calcExpr;
-      }
-    }
+    listEl.innerHTML = filteredLinks.map(link => {
+      const displayContent = link.bodyText || link.memo || '無題のストック';
 
-    function addExpense() {
-      try {
-        let val = eval(calcExpr.replace(/×/g, '*').replace(/÷/g, '/'));
-        if (isNaN(val) || val < 0) val = 0;
-        val = Math.floor(val);
+      return `
+        <div class="task-item">
+          <div class="task-header">
+            <span class="badge">${escapeHtml(link.genre || 'その他')}</span>
+            <span style="font-size:0.75rem; color: var(--text-muted); font-weight:700;">${link.createdAt}</span>
+          </div>
+          ${link.author ? `<div style="font-size:0.75rem; font-weight:800; color:var(--text-muted);">${escapeHtml(link.author)}</div>` : ''}
+          <div class="task-title">${escapeHtml(displayContent)}</div>
+          
+          ${(link.memo && link.bodyText) ? `<div class="task-memo">💡 <b>メモ:</b> ${escapeHtml(link.memo)}</div>` : ''}
 
-        if (val > 0) {
-          state.todaySpentTotal += val;
-          calcExpr = '0';
-          updateCalcDisplay();
-          saveState();
-        }
-      } catch (e) {
-        alert('計算式が正しくありません');
-      }
-    }
+          ${link.url ? `
+            <div>
+              <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer" class="link-box">
+                🔗 ポストを開く
+              </a>
+            </div>
+          ` : ''}
 
-    function confirmDailySettle() {
-      if (calcExpr !== '0') {
-        addExpense();
-      }
-      if (!state.isSettledToday) {
-        state.isSettledToday = true;
-        const todayStr = formatDateKey(new Date());
-        state.dailySettlements[todayStr] = state.todaySpentTotal;
-        state.stampedDates[todayStr] = true;
-        state.boostBonus = 0;
-      }
-      saveState();
-    }
+          <div class="item-actions">
+            <button class="btn-action btn-copy" style="padding:4px 8px;" onclick="copyItemText(\`${escapeHtml(displayContent)}\`)">📋 コピー</button>
+            <button class="delete-btn" onclick="deleteLink(${link.id})">削除</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 
-    function unsettle() {
-      if (confirm('本日の精算を取り消しますか？')) {
-        const todayStr = formatDateKey(new Date());
-        delete state.dailySettlements[todayStr];
-        state.todaySpentTotal = 0;
-        state.isSettledToday = false;
-        saveState();
-      }
-    }
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, match => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[match]));
+  }
 
-    function allReset() {
-      if (confirm('【注意】これまでのすべての計算記録・買い物リストがリセットされます。\n本当に初期化しますか？')) {
-        state = { ...defaultState };
-        calcExpr = '0';
-        updateCalcDisplay();
-        saveState();
-        alert('すべての記録を初期化しました。');
-      }
-    }
+  renderLinks();
+</script>
 
-    function addTask() {
-      const textEl = document.getElementById('taskText');
-      const text = textEl.value.trim();
-      const category = document.getElementById('taskCategory').value;
-      if (!text) return;
-      state.tasks.push({ id: Date.now(), category, text, completed: false });
-      textEl.value = '';
-      saveState();
-    }
-
-    function toggleTask(id) {
-      const task = state.tasks.find(t => t.id === id);
-      if (task) { task.completed = !task.completed; saveState(); }
-    }
-
-    function deleteTask(id) {
-      state.tasks = state.tasks.filter(t => t.id !== id);
-      saveState();
-    }
-
-    function escapeHtml(str) {
-      return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-    }
-  </script>
 </body>
 </html>
