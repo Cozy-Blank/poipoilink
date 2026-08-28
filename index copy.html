@@ -15,6 +15,7 @@
   <meta property="og:image" content="https://i.ibb.co/9kn0bgJm/image.png">
 
   <!-- スマホのホーム画面に追加したときのアイコン設定 -->
+  <!-- お好きな画像のURLに差し替えてください -->
   <link rel="apple-touch-icon" href="https://i.ibb.co/9kn0bgJm/image.png">
   <link rel="icon" sizes="192x192" href="https://i.ibb.co/9kn0bgJm/image.png">
   <!-- WEBアプリ化（フルスクリーン表示）の設定 -->
@@ -341,17 +342,26 @@
 
   <!-- 入力フォーム -->
   <div class="card">
-    <!-- 1. URL入力欄 -->
     <fieldset class="fieldset">
-      <legend>URL（Xなどのリンク）</legend>
-      <input type="text" id="urlInput" placeholder="https://x.com/...">
-    </fieldset>
-
+  <legend>ジャンル（自動判定・変更可能）</legend>
+  <select id="genreSelect">
+    <option value="学び">📚 学び</option>
+    <option value="アイデア">💡 アイデア</option>
+    <option value="健康">🌿 健康</option>
+    <option value="暮らし生活">🏠 暮らし生活</option>
+    <option value="社会問題">🌐 社会問題</option>
+    <option value="防災">⛑️ 防災</option>
+    <option value="レシピ">🍳 レシピ</option>
+    <option value="オンラインサロン">💬 オンラインサロン</option>
+    <option value="お気に入り">⭐ お気に入り</option>
+    <option value="その他" selected>✨ その他</option>
+  </select>
+</fieldset>
     <button class="btn-fetch" onclick="fetchPostText()">
       📥 本文を取得する
     </button>
 
-    <!-- 2. 取得テキスト プレビュー画面 -->
+    <!-- 取得テキスト プレビュー画面 -->
     <div class="preview-card" id="previewArea" style="display: none;">
       <div class="preview-header">
         <div class="preview-author" id="previewAuthor">ユーザー名</div>
@@ -363,24 +373,28 @@
       </div>
     </div>
 
-    <!-- 3. ジャンル選択（1つに統合） -->
+    <!-- ジャンル選択 -->
     <fieldset class="fieldset">
       <legend>ジャンル（自動判定・変更可能）</legend>
       <select id="genreSelect">
         <option value="学び">📚 学び</option>
-        <option value="アイデア">💡 アイデア</option>
-        <option value="健康">🌿 健康</option>
-        <option value="暮らし生活">🏠 暮らし生活</option>
-        <option value="社会問題">🌐 社会問題</option>
-        <option value="防災">⛑️ 防災</option>
-        <option value="レシピ">🍳 レシピ</option>
         <option value="オンラインサロン">💬 オンラインサロン</option>
-        <option value="お気に入り">⭐ お気に入り</option>
+        <option value="社会問題">🌐 社会問題</option>
+        <option value="健康">🌿 健康</option>
+        <option value="防災">⛑️ 防災</option>
+        <option value="暮らし">🏠 暮らし</option>
+        <option value="アイデア">💡 アイデア</option>
+        <option value="レシピ">🍳 レシピ</option>
+        <option value="カスタムAI">🤖 カスタムAI</option>
+        <option value="法律">⚖️ 法律</option>
+        <option value="お金">💰 お金</option>
+        <option value="読書映画">🎬 読書映画</option>
+        <option value="法則">🔍 法則</option>
         <option value="その他" selected>✨ その他</option>
       </select>
     </fieldset>
 
-    <!-- 4. メモ欄 -->
+    <!-- メモ欄 -->
     <fieldset class="fieldset">
       <legend>メモ（空欄のままでもOK）</legend>
       <textarea id="memoInput" placeholder="メモを入力..."></textarea>
@@ -392,21 +406,21 @@
   </div>
 
   <!-- フィルタータブ -->
-  <div class="tabs-wrapper">
-    <div class="tabs" id="filterTabs">
-      <div class="tab active" onclick="setFilter('all', this)">すべて</div>
-      <div class="tab" onclick="setFilter('学び', this)">📚 学び</div>
-      <div class="tab" onclick="setFilter('アイデア', this)">💡 アイデア</div>
-      <div class="tab" onclick="setFilter('健康', this)">🌿 健康</div>
-      <div class="tab" onclick="setFilter('暮らし生活', this)">🏠 暮らし生活</div>
-      <div class="tab" onclick="setFilter('社会問題', this)">🌐 社会問題</div>
-      <div class="tab" onclick="setFilter('防災', this)">⛑️ 防災</div>
-      <div class="tab" onclick="setFilter('レシピ', this)">🍳 レシピ</div>
-      <div class="tab" onclick="setFilter('オンラインサロン', this)">💬 オンラインサロン</div>
-      <div class="tab" onclick="setFilter('お気に入り', this)">⭐ お気に入り</div>
-      <div class="tab" onclick="setFilter('その他', this)">✨ その他</div>
-    </div>
+<div class="tabs-wrapper">
+  <div class="tabs" id="filterTabs">
+    <div class="tab active" onclick="setFilter('all', this)">すべて</div>
+    <div class="tab" onclick="setFilter('学び', this)">📚 学び</div>
+    <div class="tab" onclick="setFilter('アイデア', this)">💡 アイデア</div>
+    <div class="tab" onclick="setFilter('健康', this)">🌿 健康</div>
+    <div class="tab" onclick="setFilter('暮らし生活', this)">🏠 暮らし生活</div>
+    <div class="tab" onclick="setFilter('社会問題', this)">🌐 社会問題</div>
+    <div class="tab" onclick="setFilter('防災', this)">⛑️ 防災</div>
+    <div class="tab" onclick="setFilter('レシピ', this)">🍳 レシピ</div>
+    <div class="tab" onclick="setFilter('オンラインサロン', this)">💬 オンラインサロン</div>
+    <div class="tab" onclick="setFilter('お気に入り', this)">⭐ お気に入り</div>
+    <div class="tab" onclick="setFilter('その他', this)">✨ その他</div>
   </div>
+</div>
 
   <!-- リスト表示部 -->
   <div id="linkList" class="task-list"></div>
@@ -418,17 +432,17 @@
   let fetchedBodyText = '';
   let links = JSON.parse(localStorage.getItem('poipoilinks') || '[]');
 
-  const keywordMap = {
-    '学び': ['学び', '自己啓発', 'マインド', '思考', '勉強', '学習', '習慣', '成長', '成功', 'モチベーション', '読書', '知識', 'スキル', '心理学', '哲学', '法則', '本', '映画', '小説', '法律', '契約', '権利'],
-    'アイデア': ['アイデア', 'ひらめき', '企画', '発想', 'デザイン', 'クリエイティブ', 'ブレスト', '改善', '仕組み', 'ai', 'chatgpt', 'prompt', 'プロンプト', 'claude', 'gemini', '生成ai', 'gpt', '自動化', 'llm'],
-    '健康': ['健康', '睡眠', '食事', '栄養', '運動', '筋トレ', 'ダイエット', 'メンタル', 'ヘルス', '予防', '医療', 'ストレッチ', 'ヨガ'],
-    '暮らし生活': ['暮らし', '生活', '掃除', '収納', 'インテリア', '家事', '便利グッズ', '断捨離', 'ライフハック', '部屋', 'お金', '投資', '節約', '貯金', '資産運用', '税金', '株', 'nisa', '副業', '家計'],
-    '社会問題': ['社会問題', '事件', '事故', 'ニュース', '政治', '環境', '貧困', '少子化', '少子高齢化', '差別', '人権', '福祉', '税金問題', '不祥事', '批判', '議論', 'SDGs'],
-    '防災': ['防災', '地震', '災害', '避難', '備蓄', 'ハザード', '台風', '救急', '安全', '緊急'],
-    'レシピ': ['レシピ', '料理', '献立', 'ごはん', 'スイーツ', '時短料理', '作り置き', 'おやつ', 'クッキング', '美味しい'],
-    'オンラインサロン': ['サロン', 'コミュニティ', 'メンバー', 'オフ会', '限定配信', 'discord', 'slack'],
-    'お気に入り': []
-  };
+ const keywordMap = {
+  '学び': ['学び', '自己啓発', 'マインド', '思考', '勉強', '学習', '習慣', '成長', '成功', 'モチベーション', '読書', '知識', 'スキル', '心理学', '哲学', '法則', '本', '映画', '小説', '法律', '契約', '権利'],
+  'アイデア': ['アイデア', 'ひらめき', '企画', '発想', 'デザイン', 'クリエイティブ', 'ブレスト', '改善', '仕組み', 'ai', 'chatgpt', 'prompt', 'プロンプト', 'claude', 'gemini', '生成ai', 'gpt', '自動化', 'llm'],
+  '健康': ['健康', '睡眠', '食事', '栄養', '運動', '筋トレ', 'ダイエット', 'メンタル', 'ヘルス', '予防', '医療', 'ストレッチ', 'ヨガ'],
+  '暮らし生活': ['暮らし', '生活', '掃除', '収納', 'インテリア', '家事', '便利グッズ', '断捨離', 'ライフハック', '部屋', 'お金', '投資', '節約', '貯金', '資産運用', '税金', '株', 'nisa', '副業', '家計'],
+  '社会問題': ['社会問題', '事件', '事故', 'ニュース', '政治', '環境', '貧困', '少子化', '少子高齢化', '差別', '人権', '福祉', '税金問題', '不祥事', '批判', '議論', 'SDGs'],
+  '防災': ['防災', '地震', '災害', '避難', '備蓄', 'ハザード', '台風', '救急', '安全', '緊急'],
+  'レシピ': ['レシピ', '料理', '献立', 'ごはん', 'スイーツ', '時短料理', '作り置き', 'おやつ', 'クッキング', '美味しい'],
+  'オンラインサロン': ['サロン', 'コミュニティ', 'メンバー', 'オフ会', '限定配信', 'discord', 'slack'],
+  'お気に入り': []
+};
 
   function normalizeXUrl(inputUrl) {
     let url = inputUrl.trim();
@@ -611,7 +625,7 @@
       listEl.innerHTML = `
         <div class="empty-state">
           <div>🌸 保存されたストックはありません</div>
-          <div style="font-size: 0.75rem; margin-top: 4px; font-weight: normal;">URLを入力して「本文を取得」を押すか、メモを入力して保存できます！</div>
+          <div style="font-size: 0.75rem; margin-top: 4px; font-weight: normal;">URLを入力して「本文を取得」を押すと保存できます！</div>
         </div>
       `;
       return;
