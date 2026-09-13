@@ -23,18 +23,39 @@
   <meta name="apple-mobile-web-app-title" content="poipoilink">
 
   <style>
-    :root {
-      --primary: #ec4899;
-      --primary-dark: #be185d;
-      --primary-light: #fce7f3;
-      --bg: #fdf2f8;
-      --card-bg: #ffffff;
-      --text-main: #831843;
-      --text-muted: #9d174d;
-      --border-color: #fbcfe8;
-      /* バナー画像をローカルの henairink_v4.png に変更 */
-      --banner-image-url: url(''https://i.ibb.co/pmYQ4QH/rink.png'');
-    }
+ :root {
+  --primary: #ec4899;
+  --primary-dark: #be185d;
+  --primary-light: #fce7f3;
+  --bg: #fdf2f8;
+  --card-bg: #ffffff;
+  --text-main: #831843;
+  --text-muted: #9d174d;
+  --border-color: #fbcfe8;
+  /* バナー画像を指定のURLに変更 */
+  --banner-image-url: url('https://i.ibb.co/pmYQ4QH/rink.png');
+}
+
+/* 最上部イラストバナー */
+.top-banner-card {
+  width: 100%;
+  aspect-ratio: 3.2 / 1;
+  max-height: 180px;
+  min-height: 110px;
+  background-color: #ffffff;
+  background-image: var(--banner-image-url);
+  /* イラスト全体を表示枠内にきれいに収める設定 */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 16px;
+  border: 2px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.08);
+  margin-bottom: 14px;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
 
     * {
       box-sizing: border-box;
