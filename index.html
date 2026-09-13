@@ -79,24 +79,23 @@
     }
 
     /* 最上部イラストバナー */
-    .top-banner-card {
-      width: 100%;
-      aspect-ratio: 3.2 / 1;
-      max-height: 180px;
-      min-height: 110px;
-      background-color: #ffffff;
-      background-image: var(--banner-image-url);
-      background-size: contain; /* 画像全体を収めるため contain に変更（お好みで cover に変更可） */
-      background-repeat: no-repeat;
-      background-position: center;
-      border-radius: 16px;
-      border: 2px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.08);
-      margin-bottom: 14px;
-      overflow: hidden;
-      pointer-events: none;
-      user-select: none;
-    }
+    /* 最上部イラストバナー */
+.top-banner-card {
+  width: 100%;
+  aspect-ratio: 2.5 / 1; /* イラストの縦横比に合わせて枠の高さを調整 */
+  background-color: #ffffff;
+  background-image: var(--banner-image-url);
+  background-size: cover; /* 左右の余白をなくし、枠いっぱいに拡大表示 */
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 16px;
+  border: 2px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.08);
+  margin-bottom: 14px;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
 
     /* 入力フォームカード */
     .card {
