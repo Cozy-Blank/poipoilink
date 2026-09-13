@@ -32,7 +32,8 @@
       --text-main: #831843;
       --text-muted: #9d174d;
       --border-color: #fbcfe8;
-      --banner-image-url: url('https://i.ibb.co/pmYQ4QH/rink.png');
+      /* バナー画像をローカルの henairink_v4.png に変更 */
+      --banner-image-url: url('henairink_v4.png');
     }
 
     * {
@@ -64,7 +65,8 @@
       min-height: 110px;
       background-color: #ffffff;
       background-image: var(--banner-image-url);
-      background-size: cover;
+      background-size: contain; /* 画像全体を収めるため contain に変更（お好みで cover に変更可） */
+      background-repeat: no-repeat;
       background-position: center;
       border-radius: 16px;
       border: 2px solid var(--border-color);
