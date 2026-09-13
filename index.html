@@ -3,33 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ポイポイリンク</title>
+  <title>poipoilink</title>
 
   <!-- アプリの説明文設定 -->
-  <meta name="description" content="X（Twitter）の投稿リンクや各種ウェブページをカテゴリ別に保存・管理できるツールです。">
+  <meta name="description" content="気になるリンク先を自動振り分けテキスト化">
 
-  <!-- OGP (LINE・SNS共有用設定) -->
+  <!-- SNSやLINEで共有した時の表示設定（OGP） -->
+  <meta property="og:title" content="poipoilink">
+  <meta property="og:description" content="気になるリンク先を自動振り分けテキスト化">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="ポイポイリンク">
-  <meta property="og:description" content="X（Twitter）の投稿リンクや各種ウェブページをカテゴリ別に保存・管理できるツールです。">
-  <meta property="og:url" content="https://Cozy-Blank.github.io/poipoilink/">
-  <meta property="og:image" content="https://Cozy-Blank.github.io/poipoilink/henairink.png">
-  <meta property="og:site_name" content="ポイポイリンク">
+  <meta property="og:image" content="https://i.ibb.co/zTV2X8vK/SNS.png">
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ポイポイリンク">
-  <meta name="twitter:description" content="X（Twitter）の投稿リンクや各種ウェブページをカテゴリ別に保存・管理できるツールです。">
-  <meta name="twitter:image" content="https://Cozy-Blank.github.io/poipoilink/henairinkk.png">
-
-  <!-- ファビコン・スマホのホーム画面用アイコン設定 -->
-  <link rel="icon" href="https://Cozy-Blank.github.io/poipoilink/henairinkk.png" type="image/png">
-  <link rel="apple-touch-icon" href="https://Cozy-Blank.github.io/poipoilink/henairinkk.png">
-
-  <!-- WEBアプリ化（PWA・フルスクリーン表示）の設定 -->
+  <!-- スマホのホーム画面に追加したときのアイコン設定 -->
+  <link rel="apple-touch-icon" href="https://i.ibb.co/zTV2X8vK/SNS.png">
+  <link rel="icon" sizes="192x192" href="https://i.ibb.co/zTV2X8vK/SNS.png">
+  <!-- WEBアプリ化（フルスクリーン表示）の設定 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="ポイポイリンク">
+  <meta name="apple-mobile-web-app-title" content="poipoilink">
 
   <style>
     :root {
@@ -41,7 +32,7 @@
       --text-main: #831843;
       --text-muted: #9d174d;
       --border-color: #fbcfe8;
-      --banner-image-url: url('https://i.ibb.co/pmYQ4QH/rinkk.png');
+      --banner-image-url: url('https://i.ibb.co/pmYQ4QH/rink.png');
     }
 
     * {
@@ -330,14 +321,13 @@
 
     .genre-change-select {
       font-size: 0.75rem;
-      padding: 4px 8px;
+      padding: 3px 6px;
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background: #fff5f8;
+      border-radius: 6px;
+      background: #fff;
       color: var(--primary-dark);
       font-weight: 700;
       outline: none;
-      cursor: pointer;
     }
 
     .delete-btn {
