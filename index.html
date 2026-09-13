@@ -2,21 +2,19 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>poipoilink</title>
   <meta name="description" content="気になるリンクを自動振り分けテキスト化">
 
   <!-- 📱 【スマホ用】ホーム画面アイコンの設定 -->
-  <!-- iPhone / iPad 用 (180x180px推奨) -->
-  <link rel="apple-touch-icon" href="https://vercel.app/og-poipoi.png">
-  <!-- Android 用 (192x192px推奨) -->
+  <link rel="apple-touch-icon" href="https://poipoilink.vercel.app/og-poipoi.png">
   <link rel="icon" type="image/png" sizes="192x192" href="https://poipoilink.vercel.app/og-poipoi.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://poipoilink.vercel.app/og-poipoi.png">
 
   <!-- 💬 【共通】SNSシェア用の設定（OGP） -->
   <meta property="og:title" content="poipoilink">
-  <meta property="og:description" content="気になるリンクを自動振り分けテキスト化
-   ）">
-  <meta property="og:url" content="https://poipoilink.vercel.app/og-poipoi.png">
+  <meta property="og:description" content="気になるリンクを自動振り分けテキスト化">
+  <meta property="og:url" content="https://poipoilink.vercel.app/">
   <meta property="og:type" content="website">
   
   <!-- OGP画像の絶対パス -->
@@ -26,46 +24,27 @@
 
   <!-- X（旧Twitter）用の設定 -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="ページのタイトル">
-  <meta name="twitter:description" content="ページの説明文">
+  <meta name="twitter:title" content="poipoilink">
+  <meta name="twitter:description" content="気になるリンクを自動振り分けテキスト化">
   <meta name="twitter:image" content="https://poipoilink.vercel.app/og-poipoi.png">
-</head>
 
+  <!-- WEBアプリ化（フルスクリーン表示）の設定 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="poipoilink">
 
   <style>
- :root {
-  --primary: #ec4899;
-  --primary-dark: #be185d;
-  --primary-light: #fce7f3;
-  --bg: #fdf2f8;
-  --card-bg: #ffffff;
-  --text-main: #831843;
-  --text-muted: #9d174d;
-  --border-color: #fbcfe8;
-  /* バナー画像を指定のURLに変更 */
-  --banner-image-url: url('https://i.ibb.co/pmYQ4QH/rink.png');
-}
-
-/* 最上部イラストバナー */
-.top-banner-card {
-  width: 100%;
-  aspect-ratio: 3.2 / 1;
-  max-height: 180px;
-  min-height: 110px;
-  background-color: #ffffff;
-  background-image: var(--banner-image-url);
-  /* イラスト全体を表示枠内にきれいに収める設定 */
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  border-radius: 16px;
-  border: 2px solid var(--border-color);
-  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.08);
-  margin-bottom: 14px;
-  overflow: hidden;
-  pointer-events: none;
-  user-select: none;
-}
+    :root {
+      --primary: #ec4899;
+      --primary-dark: #be185d;
+      --primary-light: #fce7f3;
+      --bg: #fdf2f8;
+      --card-bg: #ffffff;
+      --text-main: #831843;
+      --text-muted: #9d174d;
+      --border-color: #fbcfe8;
+      --banner-image-url: url('https://i.ibb.co/pmYQ4QH/rink.png');
+    }
 
     * {
       box-sizing: border-box;
@@ -89,23 +68,22 @@
     }
 
     /* 最上部イラストバナー */
-    /* 最上部イラストバナー */
-.top-banner-card {
-  width: 100%;
-  aspect-ratio: 2.5 / 1; /* イラストの縦横比に合わせて枠の高さを調整 */
-  background-color: #ffffff;
-  background-image: var(--banner-image-url);
-  background-size: cover; /* 左右の余白をなくし、枠いっぱいに拡大表示 */
-  background-repeat: no-repeat;
-  background-position: center;
-  border-radius: 16px;
-  border: 2px solid var(--border-color);
-  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.08);
-  margin-bottom: 14px;
-  overflow: hidden;
-  pointer-events: none;
-  user-select: none;
-}
+    .top-banner-card {
+      width: 100%;
+      aspect-ratio: 2.5 / 1;
+      background-color: #ffffff;
+      background-image: var(--banner-image-url);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      border-radius: 16px;
+      border: 2px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.08);
+      margin-bottom: 14px;
+      overflow: hidden;
+      pointer-events: none;
+      user-select: none;
+    }
 
     /* 入力フォームカード */
     .card {
@@ -495,7 +473,7 @@
     '健康身体': ['健康', '睡眠', '運動', '筋トレ', 'ダイエット', 'メンタル', 'ヘルス', '予防', '医療', 'ストレッチ', 'ヨガ', '身体', '体調'],
     '健康食事': ['食事', '栄養', 'レシピ', '料理', '献立', 'ごはん', 'スイーツ', '時短料理', '作り置き', 'おやつ', 'クッキング', '美味しい', 'カロリー', 'タンパク質'],
     '暮らし生活': ['暮らし', '生活', '掃除', '収納', 'インテリア', '家事', '便利グッズ', '断捨離', '部屋', 'お金', '投資', '節約', '貯金', '資産運用', '税金', '株', 'nisa', '副業', '家計'],
-    'ライフハック': ['ライフハック', '裏ワザ', '効率化', '時短', '便利', 'テクニック', '活用'],
+    'ライフハック': ['ライフハック', '裏ワザ', '効率化', '時短', '便利', 'テクテクニック', '活用'],
     '便利アプリ': ['アプリ', 'app', 'tool', 'ツール', 'ソフト', '拡張機能', 'iphone', 'android', 'mac', 'windows'],
     'AI指示': ['ai', 'chatgpt', 'prompt', 'プロンプト', 'claude', 'gemini', '生成ai', 'gpt', '自動化', 'llm', '指示文'],
     '暗号資産': ['暗号資産', '仮想通貨', 'ビットコイン', 'btc', 'イーサリアム', 'eth', 'crypto', 'web3', 'nft', 'ブロックチェーン'],
