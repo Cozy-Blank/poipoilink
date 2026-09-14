@@ -396,16 +396,16 @@
       <legend>ジャンル（自動判定・変更可能）</legend>
       <select id="genreSelect">
         <option value="学び">📚 学び</option>
-        <option value="健康身体">💪 健康身体</option>
-        <option value="健康食事">🥗 健康食事</option>
+        <option value="心理">🧠 心理</option>
+        <option value="身体">💪 身体</option>
+        <option value="食事">🥗 食事</option>
         <option value="暮らし生活">🏠 暮らし生活</option>
         <option value="ライフハック">⚡ ライフハック</option>
         <option value="便利アプリ">📱 便利アプリ</option>
         <option value="AI指示">🤖 AI指示</option>
-        <option value="暗号資産">🪙 暗号資産</option>
-        <option value="法律">⚖️ 法律</option>
-        <option value="社会問題">🌐 社会問題</option>
-        <option value="防災">⛑️ 防災</option>
+        <option value="資産">🪙 資産</option>
+        <option value="いざという時">🆘 いざという時</option>
+        <option value="ニュース">🌐 ニュース</option>
         <option value="サロン">💬 サロン</option>
         <option value="その他" selected>✨ その他</option>
       </select>
@@ -427,16 +427,16 @@
     <div class="tabs" id="filterTabs">
       <div class="tab active" onclick="setFilter('all', this)">すべて</div>
       <div class="tab" onclick="setFilter('学び', this)">📚 学び</div>
-      <div class="tab" onclick="setFilter('健康身体', this)">💪 健康身体</div>
-      <div class="tab" onclick="setFilter('健康食事', this)">🥗 健康食事</div>
+      <div class="tab" onclick="setFilter('心理', this)">🧠 心理</div>
+      <div class="tab" onclick="setFilter('身体', this)">💪 身体</div>
+      <div class="tab" onclick="setFilter('食事', this)">🥗 食事</div>
       <div class="tab" onclick="setFilter('暮らし生活', this)">🏠 暮らし生活</div>
       <div class="tab" onclick="setFilter('ライフハック', this)">⚡ ライフハック</div>
       <div class="tab" onclick="setFilter('便利アプリ', this)">📱 便利アプリ</div>
       <div class="tab" onclick="setFilter('AI指示', this)">🤖 AI指示</div>
-      <div class="tab" onclick="setFilter('暗号資産', this)">🪙 暗号資産</div>
-      <div class="tab" onclick="setFilter('法律', this)">⚖️ 法律</div>
-      <div class="tab" onclick="setFilter('社会問題', this)">🌐 社会問題</div>
-      <div class="tab" onclick="setFilter('防災', this)">⛑️ 防災</div>
+      <div class="tab" onclick="setFilter('資産', this)">🪙 資産</div>
+      <div class="tab" onclick="setFilter('いざという時', this)">🆘 いざという時</div>
+      <div class="tab" onclick="setFilter('ニュース', this)">🌐 ニュース</div>
       <div class="tab" onclick="setFilter('サロン', this)">💬 サロン</div>
       <div class="tab" onclick="setFilter('その他', this)">✨ その他</div>
     </div>
@@ -454,33 +454,33 @@
 
   const genreList = [
     { value: '学び', label: '📚 学び' },
-    { value: '健康身体', label: '💪 健康身体' },
-    { value: '健康食事', label: '🥗 健康食事' },
+    { value: '心理', label: '🧠 心理' },
+    { value: '身体', label: '💪 身体' },
+    { value: '食事', label: '🥗 食事' },
     { value: '暮らし生活', label: '🏠 暮らし生活' },
     { value: 'ライフハック', label: '⚡ ライフハック' },
     { value: '便利アプリ', label: '📱 便利アプリ' },
     { value: 'AI指示', label: '🤖 AI指示' },
-    { value: '暗号資産', label: '🪙 暗号資産' },
-    { value: '法律', label: '⚖️ 法律' },
-    { value: '社会問題', label: '🌐 社会問題' },
-    { value: '防災', label: '⛑️ 防災' },
+    { value: '資産', label: '🪙 資産' },
+    { value: 'いざという時', label: '🆘 いざという時' },
+    { value: 'ニュース', label: '🌐 ニュース' },
     { value: 'サロン', label: '💬 サロン' },
     { value: 'その他', label: '✨ その他' }
   ];
 
   const keywordMap = {
-    '学び': ['学び', '自己啓発', 'マインド', '思考', '勉強', '学習', '習慣', '成長', '成功', 'モチベーション', '読書', '知識', 'スキル', '心理学', '哲学', '法則', '本', '映画', '小説'],
-    '健康身体': ['健康', '睡眠', '運動', '筋トレ', 'ダイエット', 'メンタル', 'ヘルス', '予防', '医療', 'ストレッチ', 'ヨガ', '身体', '体調'],
-    '健康食事': ['食事', '栄養', 'レシピ', '料理', '献立', 'ごはん', 'スイーツ', '時短料理', '作り置き', 'おやつ', 'クッキング', '美味しい', 'カロリー', 'タンパク質'],
-    '暮らし生活': ['暮らし', '生活', '掃除', '収納', 'インテリア', '家事', '便利グッズ', '断捨離', '部屋', 'お金', '投資', '節約', '貯金', '資産運用', '税金', '株', 'nisa', '副業', '家計'],
-    'ライフハック': ['ライフハック', '裏ワザ', '効率化', '時短', '便利', 'テクテクニック', '活用'],
+    '学び': ['学び', '自己啓発', '思考', '勉強', '学習', '習慣', '成長', '成功', 'モチベーション', '読書', '知識', 'スキル', '哲学', '法則', '本', '映画', '小説'],
+    '心理': ['心理', '心理学', 'メンタル', '感情', 'ストレス', 'マインド', '人間関係', '悩み', '共感', 'メンタルヘルス'],
+    '身体': ['身体', '健康', '睡眠', '運動', '筋トレ', 'ダイエット', 'ヘルス', '予防', '医療', 'ストレッチ', 'ヨガ', '体調', '姿勢', '疲労'],
+    '食事': ['食事', '栄養', 'レシピ', '料理', '献立', 'ごはん', 'スイーツ', '時短料理', '作り置き', 'おやつ', 'クッキング', '美味しい', 'カロリー', 'タンパク質'],
+    '暮らし生活': ['暮らし', '生活', '掃除', '収納', 'インテリア', '家事', '便利グッズ', '断捨離', '部屋', '家計'],
+    'ライフハック': ['ライフハック', '裏ワザ', '効率化', '時短', '便利', 'テクニック', '活用'],
     '便利アプリ': ['アプリ', 'app', 'tool', 'ツール', 'ソフト', '拡張機能', 'iphone', 'android', 'mac', 'windows'],
     'AI指示': ['ai', 'chatgpt', 'prompt', 'プロンプト', 'claude', 'gemini', '生成ai', 'gpt', '自動化', 'llm', '指示文'],
-    '暗号資産': ['暗号資産', '仮想通貨', 'ビットコイン', 'btc', 'イーサリアム', 'eth', 'crypto', 'web3', 'nft', 'ブロックチェーン'],
-    '法律': ['法律', '契約', '権利', '弁護士', '法務', '規約', '著作権', '労働法', 'コンプライアンス'],
-    '社会問題': ['社会問題', '事件', '事故', 'ニュース', '政治', '環境', '貧困', '少子化', '少子高齢化', '差別', '人権', '福祉', '税金問題', '不祥事', '批判', '議論', 'SDGs'],
-    '防災': ['防災', '地震', '災害', '避難', '備蓄', 'ハザード', '台風', '救急', '安全', '緊急'],
-    'サロン': ['サロン', 'コミュニティ', 'メンバー', 'オフ会', '限定配信', 'discord', 'slack', 'オンラインサロン']
+    '資産': ['資産', 'お金', '投資', '節約', '貯金', '資産運用', '株', 'nisa', '副業', '暗号資産', '仮想通貨', 'XRP', 'fler', 'イーサリアム', 'eth', 'crypto', 'web3', 'nft', 'ブロックチェーン'],
+    'いざという時': ['いざという時', '親','防災', '地震', '災害', '避難', '備蓄', 'ハザード', '台風', '救急', '安全', '緊急', '法律', '契約', '権利', '弁護士', '法務', '規約', '著作権', '労働法', 'コンプライアンス', 'トラブル'],
+    'ニュース': ['ニュース', '社会問題', '事件', '事故', '政治', '環境', '貧困', '少子化', '少子高齢化', '差別', '人権', '福祉', '税金問題', '不祥事', '批判', '議論', 'sdgs'],
+    'サロン': ['サロン', 'コミュニティ', 'メンバー', 'オフ会', '限定配信', 'discord', 'slack', 'オンラインサロン','pi','倍音','智慧']
   };
 
   function normalizeXUrl(inputUrl) {
